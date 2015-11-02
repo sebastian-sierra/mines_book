@@ -50,12 +50,13 @@ coverage.xml
 docs/_build/
 
 # Node modules
+
 mines_book/static/node_modules
 
 #Semantic
-mines_book/static/static/src/
-mines_book/static/static/tasks/
-mines_book/static/static/gulpfile.js
+/mines_book/static/semantic/src
+/mines_book/static/semantic/tasks
+/mines_book/static/semantic/gulpfile.js
 
 #Idea
 .idea/
