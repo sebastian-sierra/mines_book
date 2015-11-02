@@ -1,0 +1,12 @@
+<div class="ui four cards">
+    {% for group in groups %}
+        <div class="card">
+            <div class="image">
+                <img src="{{ group.profile_pic.url }}">
+            </div>
+            <div class="content">
+                <a class="header" href="/groups/{{ group.id }}">{{ group.name }}</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,12 @@
+<div class="ui four cards">
+    {% for student in students %}
+        <div class="card">
+            <div class="image">
+                <img src="{{ student.profile_pic.url }}">
+            </div>
+            <div class="content">
+                <a class="header" href="/students/{{ student.user.username }}">{{ student.user.first_name }} {{ student.user.last_name }}</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,39 @@
+{% extends "mines_book/index.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ user.first_name }} {{ user.last_name }}'s Profile {% endblock %}
+
+{% block content %}
+    <div id="username" class="hidden" data-username="{{ user.username }}"></div>
+
+    <div class="ui clearing center aligned segment">
+        <div class="ui grid">
+            <div class="four wide column">
+                <img class="ui medium circular image" src="{{ user.student.profile_pic.url }}">
+            </div>
+            <div class="twelve wide column middle aligned">
+                <h1 class="right aligned">{{ user.first_name }} {{ user.last_name }}'s Profile</h1>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="ui top attached pointing four item menu" id="user_menu">
+        <a class="active item" id="feed">
+            Feed
+        </a>
+        <a class="item">
+            Profile
+        </a>
+        <a class="item" id="friends">
+            Friends
+        </a>
+        <a class="item" id="joined_groups">
+            Joined Groups
+        </a>
+    </div>
+
+    <div class="ui bottom attached segment" id="user_content">
+        {% include 'mines_book/user_feed.html' %}
+    </div>
+{% endblock %}
