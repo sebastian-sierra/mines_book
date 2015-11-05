@@ -1,12 +1,82 @@
+{% load staticfiles %}
 <div class="ui four cards">
     {% for group in groups %}
         <div class="card">
-            <div class="image">
+            <a class="image" href="groups/{{ group.id }}/">
                 <img src="{{ group.profile_pic.url }}">
-            </div>
+            </a>
             <div class="content">
                 <a class="header" href="/groups/{{ group.id }}">{{ group.name }}</a>
             </div>
+
+            {% if request.user.student == group.admin and request.user.username == student.username%}
+                <div class="extra content">
+                <span class="left floated like">
+                    <a class="edit_group" data-id="{{ group.id }}">
+                        <i class="edit icon"></i>
+                        Edit
+                    </a>
+                </span>
+                <span class="right floated star" data-id="{{ group.id }}">
+                    <a>
+                        <i class="delete icon"></i>
+                        Delete
+                    </a>
+                 </span>
+                </div>
+            {% endif %}
+
         </div>
     {% endfor %}
+
+    {% if request.user.username == student.username%}
+        <div class="card">
+            <a class="image create_group">
+                <img src="{% static "mines_book/img/add.png" %}">
+            </a>
+            <div class="content">
+                <a class="header create_group">Create new group</a>
+            </div>
+        </div>
+    {% endif %}
 </div>
+
+{% if request.user.username == student.username%}
+    <div class="ui modal" id="new_group_modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Create Group
+        </div>
+        <div class="content">
+            <form class="ui form" action="/groups/new/"  enctype="multipart/form-data" method="post" data-ajax="false">
+                {% csrf_token %}
+                <div class="field">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                </div>
+                <div class="field">
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                </div>
+
+                <div class="field">
+                    <label>Members:</label>
+                    <select name="members" multiple="" class="ui fluid search dropdown"></select>
+                </div>
+
+                <div class="field">
+                    {{ form.profile_pic.label_tag }}
+                    {{ form.profile_pic }}
+                </div>
+
+                <button class="ui green button" type="submit">Submit</button>
+                <div class="ui error message"></div>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui black deny button">
+                Close
+            </div>
+        </div>
+    </div>
+{% endif %}

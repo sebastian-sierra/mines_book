@@ -1,6 +1,8 @@
 // Executes the 'onLoad' function after loading the page
 $(onLoad)
 
+
+
 function onLoad() {
     $('#feed').click(showFeed)
     $('#friends').click(showFriends)
@@ -14,7 +16,7 @@ function showFeed() {
     var student_id = $('#username').data('username')
 
     $.get('/students/'+student_id+'/feed/', function(response) {
-       $('#user_content').html(response)
+        $('#user_content').html(response)
     })
 
 }
@@ -26,7 +28,7 @@ function showFriends() {
     var student_id = $('#username').data('username')
 
     $.get('/students/'+student_id+'/friends/', function(response) {
-       $('#user_content').html(response)
+        $('#user_content').html(response)
     })
 
 }
@@ -38,7 +40,62 @@ function showJoinedGroups() {
     var student_id = $('#username').data('username')
 
     $.get('/students/'+student_id+'/joined_groups/', function(response) {
-       $('#user_content').html(response)
+        $('#user_content').html(response)
+        $('.create_group').click(showNewGroupModal)
+        $('.edit_group').click(editGroup)
+        $('.ui.modal').modal()
+
+        $('.ui.form')
+            .form({
+                fields: {
+                    name     : 'empty',
+                    description   : 'empty',
+                    profile_pic : 'empty'
+                }
+            })
+
+        $('.ui.fluid.search.dropdown')
+            .dropdown({
+                apiSettings: {
+                    url: '/search_students_usernames/{query}/'
+                }
+            })
+
     })
+
+
+}
+
+function showNewGroupModal() {
+    $('#new_group_modal').modal('show')
+}
+
+function editGroup() {
+    var group_id = $(this).data('id')
+    $.get('/groups/'+group_id+'/edit/', function(response) {
+        $('#new_group_modal').after(response)
+
+        $('#edit_group_modal').modal()
+
+        $('#edit_group_form')
+            .form({
+                fields: {
+                    name     : 'empty',
+                    description   : 'empty',
+                    profile_pic : 'empty'
+                }
+            })
+
+        $('#edit_group_dropdown')
+            .dropdown({
+                apiSettings: {
+                    url: '/search_students_not_in_group/'+group_id+'/{query}/'
+                }
+            })
+
+        $('#edit_group_modal').modal('show')
+    })
+
+
 
 }

@@ -11,6 +11,9 @@ class Student(models.Model):
     country = models.CharField(max_length=20, null=True)
     friends = models.ManyToManyField('self')
 
+    def __unicode__(self):
+        return u'%s' % self.user.username
+
 
 class Group(models.Model):
     name = models.CharField(max_length=20)

@@ -56,6 +56,7 @@ mines_book/static/node_modules
 /mines_book/static/semantic/src
 /mines_book/static/semantic/tasks
 /mines_book/static/semantic/gulpfile.js
+/mines_book/static/semantic.json
 
 #Idea
 .idea/
