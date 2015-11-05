@@ -30,9 +30,15 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
-    <div class="ui bottom attached button">
-        <i class="add icon"></i>
-        Reply
+        <form class="ui reply form" method="post" action="/create_post/" id="post-form">
+            {% csrf_token %}
+            <div class="field">
+                {{ form.content }}
+            </div>
+            <div class="ui blue labeled submit icon button">
+                <i class="icon edit"></i>
+                Add Reply
+            </div>
+        </form>
     </div>
 </div>
