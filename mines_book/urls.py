@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^students/(?P<student_username>\w|.+)/feed/$', views.user_feed, name="user_feed"),
     url(r'^students/(?P<student_username>\w|.+)/friends/$', views.user_friends, name="user_feed"),
     url(r'^students/(?P<student_username>\w|.+)/joined_groups/$', views.user_joined_groups, name="user_joined_groups"),
+    url(r'^students/(?P<student_username>\w|.+)/new_post/$', views.new_post_to_student, name="new_post_to_student"),
     url(r'^students/(?P<student_username>\w|.+)$', views.home, name="home"),
     url(r'^groups/new/$', views.new_group, name="new_group"),
     url(r'^groups/(?P<group_id>\w|.+)/edit/$', views.edit_group, name="edit_group"),

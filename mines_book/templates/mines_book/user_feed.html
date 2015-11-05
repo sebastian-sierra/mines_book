@@ -1,19 +1,20 @@
 
 <div class="ui cards">
 
-    <div class="ui fluid card">
+    <div class="ui fluid card" id="new_post_form">
         <div class="content">
 
             <div class="header">
                 New Post
             </div>
 
-            <div class="ui form">
+            <form class="ui form" method="post" action="/create_post/" id="post-form">
+                {% csrf_token %}
                 <div class="field">
-                    <textarea></textarea>
+                    {{ form.content }}
                 </div>
                 <button class="ui button primary right floated" type="submit">Submit</button>
-            </div>
+            </form>
         </div>
     </div>
 
