@@ -5,8 +5,15 @@ function onLoad(){
     $('#post-form').on('submit', function(event){
         event.preventDefault();
         console.log("form submitted!")  // sanity check
-        create_post();
-    });
+        create_post()
+    })
+
+    // Submit comment on submit
+    $('#comment-form').on('submit', function(event){
+        event.preventDefault();
+        console.log("form submitted!")  // sanity check
+        create_comment()
+    })
 }
 
 // AJAX for posting
@@ -24,6 +31,24 @@ function create_post() {
         }
     });
 };
+
+// AJAX for commenting
+function create_comment() {
+    console.log("create comment is working!") // sanity check
+    var post_id = $('#postid').data('postid')
+    $.ajax({
+        url : "/new_comment/" + post_id + "/", // the endpoint
+        type : "POST", // http method
+        data : { content : $("#id_content").val() }, // data sent with the post request
+
+        // handle a successful response
+        success : function(html_response) {
+            $('#new_comment_form').after(html_response)
+        }
+    });
+};
+
+// **** Everything below here is for crsf verification *****
 
 // This function gets cookie with a given name
 function getCookie(name) {

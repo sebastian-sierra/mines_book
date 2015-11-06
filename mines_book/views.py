@@ -5,8 +5,8 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
-from forms import GroupForm, PostForm
-from models import Group, Post, PostToStudent
+from forms import GroupForm, PostForm, CommentForm
+from models import Group, Post, PostToStudent, Comment
 from utils import serialize_groups, serialize_students, serialize_students_select
 import json
 
@@ -131,6 +131,7 @@ def get_students_not_in_group(req, group_id, search_param):
     }
     return HttpResponse(json.dumps(r), content_type='application/json')
 
+
 def new_post_to_student(req, student_username):
     user = req.user
     if req.method == 'POST':
@@ -146,4 +147,20 @@ def new_post_to_student(req, student_username):
 
             context = {'post':post_to_student}
             return render(req, 'mines_book/post_card.html', context)
+    return redirect('home', student_username=user.username)
+
+
+def new_comment(req, post_id):
+    user = req.user
+    if req.method == 'POST':
+        form = CommentForm(req.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            content = cleaned_data['content']
+            post = Post.objects.get(pk=post_id)
+            comment = Comment(content=content, post=post, author=user.student)
+            comment.save()
+
+            context = {"comment" : comment}
+            return render(req, 'mines_book/comments.html', context)
     return redirect('home', student_username=user.username)
