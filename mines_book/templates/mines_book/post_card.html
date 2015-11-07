@@ -1,0 +1,45 @@
+<div class="ui fluid card">
+    <div class="content">
+        <a>
+            <img class="left floated mini ui rounded image" src="{{ post.post.author.profile_pic.url }}">
+        </a>
+        <div class="header">
+            <a>{{ post.post.author.user.first_name }}  {{ post.post.author.user.last_name }}</a>
+        </div>
+        <div class="meta">
+            <span class="date">{{  post.post.date_created }}</span>
+        </div>
+        <div class="description">
+            <p>{{ post.post.content }}</p>
+        </div>
+        <div class="ui comments">
+            {% for comment in post.post.comments.all %}
+                <div class="comment">
+                    <a class="avatar circular">
+                        <img src="{{ comment.author.profile_pic.url }}">
+                    </a>
+                    <div class="content">
+                        <a class="author">{{ comment.author.user.first_name }} {{ comment.author.user.last_name }}</a>
+                        <div class="metadata">
+                            <span class="date">{{ comment.date_created }}</span>
+                        </div>
+                        <div class="text">
+                            {{ comment.content }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <form class="ui reply form" method="post" action="/create_post/" id="comment-form">
+                {% csrf_token %}
+                <div class="field">
+                    {{ form.content }}
+                </div>
+                <div class="ui blue labeled submit icon button">
+                    <i class="icon edit"></i>
+                    Add Reply
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

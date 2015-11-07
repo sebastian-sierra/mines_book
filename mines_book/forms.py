@@ -1,5 +1,5 @@
 from django.forms import ModelForm, Textarea, ModelMultipleChoiceField
-from mines_book.models import Group, Student
+from mines_book.models import Group, Student, Post
 
 
 class GroupForm(ModelForm):
@@ -11,3 +11,9 @@ class GroupForm(ModelForm):
         widgets = {
             'description': Textarea(attrs={'rows': 4})
         }
+
+class PostForm(ModelForm):
+
+    class Meta:
+        model = Post
+        fields = ["content"]
