@@ -19,24 +19,30 @@
     <div class="fourteen wide column centered">
 
         <div class="ui inverted grey stackable menu">
-            <a class="item active">
-                Profile
-            </a>
-            <a class="item">
-                Students
-            </a>
-            <a class="item">
-                Groups
-            </a>
+
+            <div class="ui category search item">
+                <div class="ui inverted transparent icon input">
+                    <input class="prompt" type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+                <div class="results"></div>
+            </div>
 
             <div class="right menu">
-                <div class="ui category search item">
-                    <div class="ui inverted transparent icon input">
-                        <input class="prompt" type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                    <div class="results"></div>
-                </div>
+                {% block menu%}
+                    <a class="item active">
+                        Profile
+                    </a>
+                    <a class="item">
+                        Students
+                    </a>
+                    <a class="item">
+                        Groups
+                    </a>
+                    <a class="item">
+                        Logout
+                    </a>
+                {% endblock %}
             </div>
         </div>
 
