@@ -11,13 +11,13 @@
 
             {% if request.user.student == group.admin and request.user.username == student.username%}
                 <div class="extra content">
-                <span class="left floated like">
+                <span class="left floated edit">
                     <a class="edit_group" data-id="{{ group.id }}">
                         <i class="edit icon"></i>
                         Edit
                     </a>
                 </span>
-                <span class="right floated star" data-id="{{ group.id }}">
+                <span class="right floated delete" data-id="{{ group.id }}">
                     <a>
                         <i class="delete icon"></i>
                         Delete

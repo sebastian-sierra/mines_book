@@ -35,6 +35,9 @@ def user_feed(req, student_username):
     context = {"user": user, "posts": user.student.posts_received.all()}
     return render(req, 'mines_book/user_feed.html', context)
 
+def user_profile(req, student_username):
+    user = User.objects.get(username=student_username)[0]
+    context = {"student": user.student}
 
 def user_friends(req, student_username):
     user = User.objects.filter(username=student_username)[0]
@@ -79,8 +82,7 @@ def edit_group(req, group_id):
             group.name = form.cleaned_data['name']
             group.description = form.cleaned_data['description']
             group.profile_pic = form.cleaned_data['profile_pic']
-            group.members = form.cleaned_data['members']
-            group.members.add(req.user.student)
+            group.members.add(req.user.student, *form.cleaned_data['members'])
             group.save()
             return redirect('home', student_username=group.admin.user.username)
 

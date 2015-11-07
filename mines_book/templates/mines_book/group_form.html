@@ -16,13 +16,9 @@
                 </div>
 
                 <div class="field">
-                    <label>Members:</label>
+                    <label>Add new members:</label>
                     <select name="members" multiple="" class="ui fluid search dropdown" id="edit_group_dropdown">
-                        {% for member in group.members.all %}
-                            {% if member.user.id != group.admin.id %}
-                                <option selected value="{{ member.user.id }}">{{ member.user.username }}</option>
-                            {% endif %}
-                        {% endfor %}
+
                     </select>
                 </div>
 

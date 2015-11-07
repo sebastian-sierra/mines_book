@@ -3,27 +3,73 @@
 
 {% block title %}{{ user.first_name }} {{ user.last_name }}'s Profile {% endblock %}
 
+{% block menu%}
+    <a class="item {% if user == request.user %}active{% endif %}" href="/students/{{ request.user.username }}">
+        Profile
+    </a>
+    <a class="item {% if user != request.user %}active{% endif %}">
+        Students
+    </a>
+    <a class="item">
+        Groups
+    </a>
+    <a class="item">
+        Logout
+    </a>
+{% endblock %}
+
 {% block content %}
     <div id="username" class="hidden" data-username="{{ user.username }}"></div>
 
-    <div class="ui clearing center aligned segment">
-        <div class="ui grid">
-            <div class="four wide column">
-                <img class="ui medium circular image" src="{{ user.student.profile_pic.url }}">
-            </div>
-            <div class="twelve wide column middle aligned">
-                <h1 class="right aligned">{{ user.first_name }} {{ user.last_name }}'s Profile</h1>
+    <div class="ui segments">
+        <div class="ui clearing center aligned segment">
+            <div class="ui grid">
+                <div class="four wide column">
+                    <img class="ui medium circular image" src="{{ user.student.profile_pic.url }}">
+                </div>
+                <div class="twelve wide column middle aligned">
+                    <h1 class="right aligned">{{ user.first_name }} {{ user.last_name }}'s Profile</h1>
 
+                    <div class="ui horizontal bulleted link list">
+                        <div class="item">
+                            {{ user.student.option }}
+                        </div>
+                        <div class="item">
+                            {{ user.student.prom }}
+                        </div>
+                        <div class="item">
+                            {{ user.student.city }}, {{ user.student.country }}
+                        </div>
+                    </div>
+
+                </div>
             </div>
+        </div>
+        <div class="ui clearing right aligned segment">
+            {% if request.user == user%}
+                <a>
+                    <i class="edit icon"></i>
+                    Edit profile
+                </a>
+            {% endif %}
+            {% if user.student in request.user.student.friends.all %}
+                <a>
+                    <i class="remove icon"></i>
+                    Remove friend
+                </a>
+            {% endif %}
+            {% if request.user != user and user.student not in request.user.student.friends.all%}
+                <a>
+                    <i class="add icon"></i>
+                    Add friend
+                </a>
+            {% endif %}
         </div>
     </div>
 
-    <div class="ui top attached pointing five item menu" id="user_menu">
+    <div class="ui top attached pointing four item menu" id="user_menu">
         <a class="active item" id="feed">
             Feed
-        </a>
-        <a class="item">
-            Profile
         </a>
         <a class="item" id="friends">
             Friends
