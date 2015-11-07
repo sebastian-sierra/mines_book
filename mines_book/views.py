@@ -34,7 +34,9 @@ def home(req, student_username):
 def user_feed(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
-    context = {"user": user, "posts": user.student.posts_received.all(), "form": new_post_form}
+    new_comment_form = CommentForm()
+    context = {"user": user, "posts": user.student.posts_received.all(),
+               "form_post": new_post_form, "form_comment": new_comment_form}
     return render(req, 'mines_book/user_feed.html', context)
 
 
@@ -153,14 +155,16 @@ def new_post_to_student(req, student_username):
 def new_comment(req, post_id):
     user = req.user
     if req.method == 'POST':
-        form = CommentForm(req.POST)
+        post = Post.objects.get(pk=post_id)
+        comment_id = "id_comment_%s_for_" + post_id
+        form = CommentForm(req.POST, auto_id=comment_id)
         if form.is_valid():
             cleaned_data = form.cleaned_data
             content = cleaned_data['content']
-            post = Post.objects.get(pk=post_id)
+
             comment = Comment(content=content, post=post, author=user.student)
             comment.save()
 
-            context = {"comment" : comment}
+            context = {"comment": comment}
             return render(req, 'mines_book/comments.html', context)
     return redirect('home', student_username=user.username)
