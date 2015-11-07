@@ -7,13 +7,13 @@
     <a class="item {% if user == request.user %}active{% endif %}" href="/students/{{ request.user.username }}">
         Profile
     </a>
-    <a class="item {% if user != request.user %}active{% endif %}">
+    <a class="item {% if user != request.user %}active{% endif %}" href="/students/">
         Students
     </a>
     <a class="item">
         Groups
     </a>
-    <a class="item">
+    <a class="item" href="/logout/">
         Logout
     </a>
 {% endblock %}

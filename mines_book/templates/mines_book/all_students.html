@@ -1,0 +1,23 @@
+{% extends "mines_book/index.html" %}
+{% load staticfiles %}
+
+{% block title %}Students {% endblock %}
+
+{% block menu%}
+    <a class="item">
+        Profile
+    </a>
+    <a class="item active" href="/students/">
+        Students
+    </a>
+    <a class="item">
+        Groups
+    </a>
+    <a class="item" href="/logout/">
+        Logout
+    </a>
+{% endblock %}
+
+{% block content %}
+    {% include "mines_book/student_cards.html" %}
+{% endblock %}

@@ -22,6 +22,7 @@ import views
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/', views.login),
+    url(r'^logout/', views.logout),
     url(r'^search/(?P<search_param>\w|.+)/$', views.search),
     url(r'^search_students_usernames/(?P<search_param>\w|.+)/$', views.get_students_usernames),
     url(r'^search_students_not_in_group/(?P<group_id>[0-9]+)/(?P<search_param>\w|.+)/$', views.get_students_not_in_group),
@@ -30,6 +31,7 @@ urlpatterns = [
     url(r'^students/(?P<student_username>\w|.+)/joined_groups/$', views.user_joined_groups, name="user_joined_groups"),
     url(r'^students/(?P<student_username>\w|.+)/new_post/$', views.new_post_to_student, name="new_post_to_student"),
     url(r'^students/(?P<student_username>\w|.+)$', views.home, name="home"),
+    url(r'^students/$', views.get_all_students, name="all_students"),
     url(r'^groups/new/$', views.new_group, name="new_group"),
     url(r'^groups/(?P<group_id>\w|.+)/edit/$', views.edit_group, name="edit_group"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

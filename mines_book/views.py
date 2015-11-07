@@ -4,9 +4,9 @@ from django.db.models import ImageField
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from forms import GroupForm, PostForm
-from models import Group, Post, PostToStudent
+from models import Group, Post, PostToStudent, Student
 from utils import serialize_groups, serialize_students, serialize_students_select
 import json
 
@@ -24,12 +24,20 @@ def login(req):
     return render(req, 'mines_book/login.html')
 
 
+def logout(req):
+    auth_logout(req)
+    return render(req, 'mines_book/login.html')
+
 def home(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
     context = {"user": user, "posts": user.student.posts_received.all(), "form": new_post_form}
     return render(req, 'mines_book/user.html', context)
 
+
+def get_all_students(req):
+    students = Student.objects.all()
+    return render(req, "mines_book/all_students.html", {"students": students})
 
 def user_feed(req, student_username):
     user = User.objects.filter(username=student_username)[0]
