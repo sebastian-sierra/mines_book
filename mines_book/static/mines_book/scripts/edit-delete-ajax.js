@@ -15,6 +15,7 @@ function onLoadEditDelete(){
     })
 
     $('#delete_account_b').on('click', deleteAccount)
+    $('.right.floated.delete.group').on('click', deleteGroup)
 }
 
 function delete_post(post_primary_key){
@@ -58,6 +59,21 @@ function deleteAccount() {
             type : "DELETE", // http method
             success : function(response) {
               window.location.replace("/login/")
+            }
+        })
+    } else {
+        return false;
+    }
+}
+
+function deleteGroup() {
+    var group_id = $(this).data('id')
+    if (confirm('Are you sure you want to delete this group?')==true){
+        $.ajax({
+            url : "/groups/"+group_id, // the endpoint
+            type : "DELETE", // http method
+            success : function(response) {
+              $('#group-'+group_id).hide()
             }
         })
     } else {

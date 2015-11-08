@@ -47,6 +47,7 @@ function showJoinedGroups() {
 
     $.get('/students/'+student_id+'/joined_groups/', function(response) {
         $('#user_content').html(response)
+        onLoadEditDelete()
         $('.create_group').click(showNewGroupModal)
         $('.edit_group').click(editGroup)
         $('.ui.modal').modal()

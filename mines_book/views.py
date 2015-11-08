@@ -90,8 +90,10 @@ def edit_student(req):
 
 def delete_student(req):
     user = req.user
-    user.delete()
-    return redirect('login')
+    if req.method=="DELETE":
+        user.delete()
+        return redirect('login')
+    return redirect('home', student_username=user.username)
 
 
 def get_all_students(req):
@@ -118,6 +120,14 @@ def user_joined_groups(req, student_username):
     new_group_form = GroupForm()
     context = {"groups": user.student.groups_joined.all(), "form": new_group_form, "student": user, "action": "create"}
     return render(req, 'mines_book/group_cards.html', context)
+
+
+def group_view(req, group_id):
+    if req.method == "DELETE":
+        group = Group.objects.get(pk=group_id)
+        group.delete()
+        response_data = {'msg': 'Comment was deleted.'}
+        return HttpResponse(json.dumps(response_data), content_type='application/json')
 
 
 def create_group(req):

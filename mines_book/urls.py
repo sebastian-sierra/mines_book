@@ -40,4 +40,6 @@ urlpatterns = [
     url(r'^delete_comment[/]$', views.delete_comment, name="delete_comment"),
     url(r'^groups/create[/]$', views.create_group, name="create_group"),
     url(r'^groups/(?P<group_id>\w|.+)/edit[/]$', views.edit_group, name="edit_group"),
+    url(r'^groups/(?P<group_id>\w|.+)/edit[/]$', views.edit_group, name="edit_group"),
+    url(r'^groups/(?P<group_id>\w|.+)[/]$', views.group_view, name="group_view"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
