@@ -1,7 +1,7 @@
 from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.db.models import ImageField
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse, QueryDict
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -182,3 +182,41 @@ def new_comment(req, post_id):
             context = {"comment": comment}
             return render(req, 'mines_book/comments.html', context)
     return redirect('home', student_username=user.username)
+
+
+def delete_post(req):
+    if req.method == 'DELETE':
+
+        post = Post.objects.get(pk=int(QueryDict(req.body).get('postpk')))
+        post.delete()
+
+        response_data = {'msg': 'Post was deleted.'}
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+
+
+def delete_comment(req):
+    if req.method == 'DELETE':
+
+        comment = Comment.objects.get(pk=int(QueryDict(req.body).get('commentpk')))
+        comment.delete()
+
+        response_data = {'msg': 'Comment was deleted.'}
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )

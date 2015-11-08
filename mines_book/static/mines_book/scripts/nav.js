@@ -18,6 +18,7 @@ function showFeed() {
     $.get('/students/'+student_id+'/feed/', function(response) {
         $('#user_content').html(response)
         onLoadForms()
+        onLoadEditDelete()
     })
 
 }

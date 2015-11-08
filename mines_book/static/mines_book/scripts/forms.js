@@ -11,8 +11,7 @@ function onLoadForms(){
     // Submit comment on submit
     $('.ui.reply.form.comment.form').on('submit', function(event){
         event.preventDefault();
-        console.log("form submitted!")
-        // console.log($(this))// sanity check
+        console.log("form submitted!") // sanity check
         var comment_id = this.id
         create_comment(comment_id)
     })

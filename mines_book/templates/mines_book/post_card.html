@@ -26,6 +26,16 @@
                         <div class="text">
                             {{ comment.content }}
                         </div>
+                        <div>
+                            {% if request.user == comment.author.user%}
+                                <a>
+                                    <i class="edit icon comment" id="{{ comment.pk }}"></i>
+                                </a>
+                                <a>
+                                    <i class="delete icon comment" id="{{ comment.pk }}"></i>
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             {% endfor %}
