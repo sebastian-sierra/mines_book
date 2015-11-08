@@ -1,0 +1,14 @@
+<div class="comment">
+    <a class="avatar circular">
+        <img src="{{ comment.author.profile_pic.url }}">
+    </a>
+    <div class="content">
+        <a class="author">{{ comment.author.user.first_name }} {{ comment.author.user.last_name }}</a>
+        <div class="metadata">
+            <span class="date">{{ comment.date_created }}</span>
+        </div>
+        <div class="text">
+            {{ comment.content }}
+        </div>
+    </div>
+</div>
