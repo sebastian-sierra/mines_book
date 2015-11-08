@@ -1,5 +1,17 @@
-from django.forms import ModelForm, Textarea, ModelMultipleChoiceField
+from django.forms import ModelForm, Textarea, ModelMultipleChoiceField, CharField, PasswordInput
 from mines_book.models import Group, Student, Post, Comment
+
+
+class StudentForm(ModelForm):
+    username = CharField(max_length=30)
+    first_name = CharField(max_length=30)
+    last_name = CharField(max_length=30)
+    password = CharField(max_length=30, widget=PasswordInput(render_value=True))
+    confirm_password = CharField(max_length=30, widget=PasswordInput(render_value=True))
+
+    class Meta:
+        model = Student
+        exclude = ['user', 'friends']
 
 
 class GroupForm(ModelForm):

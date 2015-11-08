@@ -35,8 +35,10 @@
             </form>
 
             <div class="ui message">
-                New to us? <a href="#">Sign Up</a>
+                New to us? <a id="create_user_a">Sign Up</a>
             </div>
         </div>
     </div>
+
+    {% include "mines_book/user_form.html" with action="create"%}
 {% endblock %}
