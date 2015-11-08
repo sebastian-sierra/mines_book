@@ -1,4 +1,4 @@
-<div class="ui fluid card">
+<div class="ui fluid card" id="post-{{ post.post.pk }}">
     <div class="content">
         <a>
             <img class="left floated mini ui rounded image" src="{{ post.post.author.profile_pic.url }}">
@@ -11,6 +11,16 @@
         </div>
         <div class="description">
             <p>{{ post.post.content }}</p>
+        </div>
+        <div>
+            {% if request.user == post.post.author.user%}
+                <a>
+                    <i class="edit icon post" id="{{ post.post.pk }}"></i>
+                </a>
+                <a>
+                    <i class="delete icon post" id="{{ post.post.pk }}"></i>
+                </a>
+            {% endif %}
         </div>
         <div class="ui comments">
             {% for comment in post.post.comments.all %}

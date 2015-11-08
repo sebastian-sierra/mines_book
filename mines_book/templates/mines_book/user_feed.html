@@ -8,7 +8,7 @@
                 New Post
             </div>
 
-            <form class="ui form" method="post" action="/create_post/" id="post-form">
+            <form class="ui form" method="post" action="/create_post/" id="post-form" data-recipient_type="{{ recipient_type }}">
                 {% csrf_token %}
                 <div class="field">
                     {{ post_form.content }}

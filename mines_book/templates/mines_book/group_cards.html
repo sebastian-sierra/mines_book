@@ -2,7 +2,7 @@
 <div class="ui four cards">
     {% for group in groups %}
         <div class="card" id="group-{{ group.id }}">
-            <a class="image" href="groups/{{ group.id }}/">
+            <a class="image" href="/groups/{{ group.id }}/">
                 <img src="{{ group.profile_pic.url }}">
             </a>
             <div class="content">

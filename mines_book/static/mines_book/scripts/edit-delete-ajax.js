@@ -2,20 +2,20 @@ $(onLoadEditDelete)
 
 function onLoadEditDelete(){
 
-    $('.delete.icon.post').on('click', function(){
+    $('body').on('click', '.delete.icon.post', function(){
         var post_id = this.id
         console.log(post_id) // sanity check
         delete_post(post_id)
     })
 
-    $('.delete.icon.comment').on('click', function(){
+    $('body').on('click', '.delete.icon.comment',function(){
         var comment_id = this.id
         console.log(comment_id) // sanity check
         delete_comment(comment_id)
     })
 
     $('#delete_account_b').on('click', deleteAccount)
-    $('.right.floated.delete.group').on('click', deleteGroup)
+    $('body').on('click', '.right.floated.delete.group', deleteGroup)
 }
 
 function delete_post(post_primary_key){
