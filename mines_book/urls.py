@@ -21,7 +21,7 @@ import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^login[/]', views.login),
+    url(r'^login[/]', views.login, name="login"),
     url(r'^logout[/]', views.logout),
     url(r'^search/(?P<search_param>\w|.+)[/]$', views.search),
     url(r'^search_students_usernames/(?P<search_param>\w|.+)[/]$', views.get_students_usernames),
@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^students/(?P<student_username>\w|.+)/new_post[/]$', views.new_post_to_student, name="new_post_to_student"),
     url(r'^students/edit[/]$', views.edit_student, name="edit_student"),
     url(r'^students/create[/]$', views.create_student, name="edit_student"),
+    url(r'^students/delete[/]$', views.delete_student, name="delete_student"),
     url(r'^students/(?P<student_username>\w|.+)[/]$', views.home, name="home"),
     url(r'^students[/]$', views.get_all_students, name="all_students"),
     url(r'^new_comment/(?P<post_id>[0-9]+)[/]$', views.new_comment, name="new_comment"),

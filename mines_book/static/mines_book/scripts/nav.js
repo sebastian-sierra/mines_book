@@ -109,6 +109,4 @@ function editGroup() {
         $('#edit_group_modal').modal('show')
     })
 
-
-
 }

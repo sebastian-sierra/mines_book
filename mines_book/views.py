@@ -44,12 +44,13 @@ def home(req, student_username):
 def create_student(req):
     if req.method == "POST":
         form = StudentForm(req.POST, req.FILES)
-        if form.is_valid() and form.cleaned_data['password'] == form.cleaned_data['confirm_password']:
+        password = req.POST['password']
+        if form.is_valid() and password == form.cleaned_data['confirm_password']:
             username = form.cleaned_data['username']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             user = User.objects.create(username=username, first_name=first_name, last_name=last_name)
-            user.set_password(form.cleaned_data['password'])
+            user.set_password(password)
             option = form.cleaned_data['option']
             prom = form.cleaned_data['prom']
             profile_pic = form.cleaned_data['profile_pic']
@@ -59,7 +60,8 @@ def create_student(req):
                                              country=country)
             user.save()
             student.save()
-            authenticate(username=username, password=form.cleaned_data['password'])
+            user = authenticate(username=username, password=password)
+            auth_login(req, user)
 
             return redirect('home', student_username=user.username)
 
@@ -84,6 +86,12 @@ def edit_student(req):
             student.user.save()
 
     return redirect('home', student_username=req.user.username)
+
+
+def delete_student(req):
+    user = req.user
+    user.delete()
+    return redirect('login')
 
 
 def get_all_students(req):

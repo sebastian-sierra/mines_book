@@ -13,6 +13,8 @@ function onLoadEditDelete(){
         console.log(comment_id) // sanity check
         delete_comment(comment_id)
     })
+
+    $('#delete_account_b').on('click', deleteAccount)
 }
 
 function delete_post(post_primary_key){
@@ -48,3 +50,17 @@ function delete_comment(comment_primary_key){
         return false;
     }
 };
+
+function deleteAccount() {
+    if (confirm('Are you sure you want to delete your account?')==true){
+        $.ajax({
+            url : "/students/delete/", // the endpoint
+            type : "DELETE", // http method
+            success : function(response) {
+              window.location.replace("/login/")
+            }
+        })
+    } else {
+        return false;
+    }
+}
