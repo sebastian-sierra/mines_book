@@ -42,41 +42,5 @@
 </div>
 
 {% if request.user.username == student.username%}
-    <div class="ui modal" id="new_group_modal">
-        <i class="close icon"></i>
-        <div class="header">
-            Create Group
-        </div>
-        <div class="content">
-            <form class="ui form" action="/groups/new/"  enctype="multipart/form-data" method="post" data-ajax="false">
-                {% csrf_token %}
-                <div class="field">
-                    {{ form.name.label_tag }}
-                    {{ form.name }}
-                </div>
-                <div class="field">
-                    {{ form.description.label_tag }}
-                    {{ form.description }}
-                </div>
-
-                <div class="field">
-                    <label>Members:</label>
-                    <select name="members" multiple="" class="ui fluid search dropdown"></select>
-                </div>
-
-                <div class="field">
-                    {{ form.profile_pic.label_tag }}
-                    {{ form.profile_pic }}
-                </div>
-
-                <button class="ui green button" type="submit">Submit</button>
-                <div class="ui error message"></div>
-            </form>
-        </div>
-        <div class="actions">
-            <div class="ui black deny button">
-                Close
-            </div>
-        </div>
-    </div>
+    {% include 'mines_book/group_form.html' %}
 {% endif %}

@@ -47,7 +47,7 @@
         </div>
         <div class="ui clearing right aligned segment">
             {% if request.user == user%}
-                <a>
+                <a id ="edit_user_a">
                     <i class="edit icon"></i>
                     Edit profile
                 </a>
@@ -85,4 +85,9 @@
     <div class="ui bottom attached segment" id="user_content">
         {% include 'mines_book/user_feed.html' %}
     </div>
+
+    {% if request.user == user %}
+        {% include 'mines_book/user_form.html' with action="edit" form=student_form %}
+    {% endif %}
+
 {% endblock %}

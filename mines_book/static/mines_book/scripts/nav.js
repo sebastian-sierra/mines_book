@@ -7,6 +7,10 @@ function onLoad() {
     $('#feed').click(showFeed)
     $('#friends').click(showFriends)
     $('#joined_groups').click(showJoinedGroups)
+    $('#edit_user_a').click(showEditUserModal)
+    $('#edit_user_modal').modal()
+    $('#create_user_a').click(showCreateUserModal)
+    $('#create_user_modal').modal()
 }
 
 function showFeed() {
@@ -68,13 +72,21 @@ function showJoinedGroups() {
 }
 
 function showNewGroupModal() {
-    $('#new_group_modal').modal('show')
+    $('#create_group_modal').modal('show')
+}
+
+function showCreateUserModal() {
+    $('#create_user_modal').modal('show')
+}
+
+function showEditUserModal() {
+    $('#edit_user_modal').modal('show')
 }
 
 function editGroup() {
     var group_id = $(this).data('id')
     $.get('/groups/'+group_id+'/edit/', function(response) {
-        $('#new_group_modal').after(response)
+        $('#create_group_modal').after(response)
 
         $('#edit_group_modal').modal()
 
@@ -82,8 +94,7 @@ function editGroup() {
             .form({
                 fields: {
                     name     : 'empty',
-                    description   : 'empty',
-                    profile_pic : 'empty'
+                    description   : 'empty'
                 }
             })
 

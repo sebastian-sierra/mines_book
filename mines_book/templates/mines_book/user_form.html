@@ -1,0 +1,82 @@
+<div class="ui modal" id="{{ action }}_user_modal">
+    <i class="close icon"></i>
+    <div class="header">
+        {{ action | title }} your Profile
+    </div>
+    <div class="content">
+        <form class="ui form" action="/students/{{ action }}/"  enctype="multipart/form-data" method="post" id="{{ action }}_user_form">
+            {% csrf_token %}
+            {% if action == "create" %}
+                <div class="field">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                </div>
+            {% endif %}
+
+            {% if action == "edit" %}
+                <div class="field">
+                    <input type="hidden" value="{{ form.username.value }}"  name="username">
+                </div>
+            {% endif %}
+
+            <div class="field">
+                <label>Name</label>
+                <div class="two fields">
+                    <div class="field">
+                        {{ form.first_name }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.last_name }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Change password</label>
+                <div class="two fields">
+                    <div class="field">
+                        {{ form.password }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.confirm_password }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                {{ form.option.label_tag }}
+                {{ form.option }}
+            </div>
+
+            <div class="field">
+                {{ form.prom.label_tag }}
+                {{ form.prom }}
+            </div>
+
+            <div class="field">
+                {{ form.profile_pic.label_tag }}
+                {{ form.profile_pic }}
+            </div>
+
+            <div class="field">
+                {{ form.city.label_tag }}
+                {{ form.city }}
+            </div>
+
+            <div class="field">
+                {{ form.country.label_tag }}
+                {{ form.country }}
+            </div>
+
+            <button class="ui green button" type="submit">Submit</button>
+            <div class="ui error message"></div>
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Close
+        </div>
+    </div>
+</div>

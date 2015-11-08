@@ -1,10 +1,10 @@
-<div class="ui modal" id="edit_group_modal">
+<div class="ui modal" id="{{ action }}_group_modal">
         <i class="close icon"></i>
         <div class="header">
-            Create Group
+            {{ action | title }} Group
         </div>
         <div class="content">
-            <form class="ui form" action="/groups/{{ group.id }}/edit/"  enctype="multipart/form-data" method="post" id="edit_group_form">
+            <form class="ui form" action="/groups{% if action == "edit" %}/{{ group.id }}{% endif %}/{{ action }}/"  enctype="multipart/form-data" method="post" id="{{ action }}_group_form">
                 {% csrf_token %}
                 <div class="field">
                     {{ form.name.label_tag }}
@@ -16,8 +16,8 @@
                 </div>
 
                 <div class="field">
-                    <label>Add new members:</label>
-                    <select name="members" multiple="" class="ui fluid search dropdown" id="edit_group_dropdown">
+                    <label>Add {% if action == "edit"  %}new {% endif %}members:</label>
+                    <select name="members" multiple="" class="ui fluid search dropdown" {% if action == "edit"  %}id="edit_group_dropdown"{% endif %}>
 
                     </select>
                 </div>
