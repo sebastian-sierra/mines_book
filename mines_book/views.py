@@ -28,10 +28,12 @@ def logout(req):
     auth_logout(req)
     return render(req, 'mines_book/login.html')
 
+
 def home(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
-    context = {"user": user, "posts": user.student.posts_received.all(), "form": new_post_form}
+    context = {"user": user, "posts": user.student.posts_received.all().order_by('-post__date_created'),
+               "post_form": new_post_form}
     return render(req, 'mines_book/user.html', context)
 
 
@@ -39,17 +41,19 @@ def get_all_students(req):
     students = Student.objects.all()
     return render(req, "mines_book/all_students.html", {"students": students})
 
+
 def user_feed(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
-    new_comment_form = CommentForm()
-    context = {"user": user, "posts": user.student.posts_received.all(),
-               "form_post": new_post_form, "form_comment": new_comment_form}
+    context = {"user": user, "posts": user.student.posts_received.all().order_by('-post__date_created'),
+               "post_form": new_post_form}
     return render(req, 'mines_book/user_feed.html', context)
+
 
 def user_profile(req, student_username):
     user = User.objects.get(username=student_username)[0]
     context = {"student": user.student}
+
 
 def user_friends(req, student_username):
     user = User.objects.filter(username=student_username)[0]

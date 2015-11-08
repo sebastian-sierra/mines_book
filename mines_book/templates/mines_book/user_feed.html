@@ -11,7 +11,7 @@
             <form class="ui form" method="post" action="/create_post/" id="post-form">
                 {% csrf_token %}
                 <div class="field">
-                    {{ form.content }}
+                    {{ post_form.content }}
                 </div>
                 <button class="ui button primary right floated" type="submit">Submit</button>
             </form>

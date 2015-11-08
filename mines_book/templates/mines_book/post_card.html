@@ -29,6 +29,15 @@
                     </div>
                 </div>
             {% endfor %}
+            <div id="new_comment_form_for_{{ post.post.pk }}">
+                <form class="ui reply form comment form" method="post" action="/create_comment/" id="{{ post.post.pk }}">
+                    {% csrf_token %}
+                    <div class="field">
+                        <input id="id_comment_content_for_{{ post.post.pk }}" name="content">
+                    </div>
+                    <button class="ui button primary right floated" type="submit">Reply</button>
+                </form>
+            </div>
         </div>
 
     </div>

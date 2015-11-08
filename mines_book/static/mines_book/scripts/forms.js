@@ -1,6 +1,6 @@
-$(onLoad)
+$(onLoadForms)
 
-function onLoad(){
+function onLoadForms(){
     // Submit post on submit
     $('#post-form').on('submit', function(event){
         event.preventDefault();
@@ -30,6 +30,8 @@ function create_post() {
         // handle a successful response
         success : function(html_response) {
             $('#new_post_form').after(html_response)
+            $('#id_content').val('')
+            onLoadForms()
         }
     });
 };
@@ -47,6 +49,7 @@ function create_comment(comment_form_id) {
         // handle a successful response
         success : function(html_response) {
             $('#new_comment_form_for_' + comment_form_id).before(html_response)
+            $(content_id).val('')
         }
     });
 };

@@ -27,7 +27,7 @@ class Group(models.Model):
 class Post(models.Model):
     content = models.CharField(max_length=500)
     author = models.ForeignKey('Student', related_name="posts_authored")
-    date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
 
@@ -44,7 +44,7 @@ class PostToGroup(models.Model):
 class Comment(models.Model):
     content = models.CharField(max_length=200)
     author = models.ForeignKey('Student', related_name="comments_authored")
-    date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     post = models.ForeignKey('Post', related_name="comments")
 
