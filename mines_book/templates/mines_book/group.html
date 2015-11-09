@@ -1,0 +1,78 @@
+{% extends "mines_book/index.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ user.first_name }} {{ user.last_name }}'s Profile {% endblock %}
+
+{% block menu%}
+    <a class="item" href="/students/{{ request.user.username }}">
+        Profile
+    </a>
+    <a class="item" href="/students/">
+        Students
+    </a>
+    <a class="item" href="/groups/">
+        Groups
+    </a>
+    <a class="item" href="/logout/">
+        Logout
+    </a>
+{% endblock %}
+
+{% block content %}
+    <div id="group_id" class="hidden" data-group_id="{{ group.id }}"></div>
+
+    <div class="ui segments">
+        <div class="ui clearing center aligned segment">
+            <div class="ui grid">
+                <div class="four wide column">
+                    <img class="ui medium circular image" src="{{ group.profile_pic.url }}">
+                </div>
+                <div class="twelve wide column middle aligned">
+                    <h1 class="right aligned">{{ group.name }}'s Profile</h1>
+
+                    <div class="ui horizontal bulleted link list">
+                        <div class="item">
+                            {{ group.description }}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="ui clearing right aligned segment">
+            {% if request.user == group.admin.user%}
+                <a id ="edit_group_a">
+                    <i class="edit icon"></i>
+                    Edit group
+                </a>
+            {% endif %}
+            {% if user.student not in group.followers.all %}
+                <a>
+                    <i class="follow icon"></i>
+                    Follow group
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="ui top attached pointing three item menu" id="group_menu">
+        <a class="active item" id="group_feed_a">
+            Feed
+        </a>
+        <a class="item" id="group_members_a">
+            Members
+        </a>
+        <a class="item" id="group_followers_a">
+            Followers
+        </a>
+    </div>
+
+    <div class="ui bottom attached segment" id="group_content">
+        {% include 'mines_book/user_feed.html' with recipient_type="group" posts=group.posts_received.all %}
+    </div>
+
+    {% if request.user == group.admin.user %}
+        {% include 'mines_book/group_form.html' with action="edit" form=group_form %}
+    {% endif %}
+
+{% endblock %}

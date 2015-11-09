@@ -1,19 +1,19 @@
 // Executes the 'onLoad' function after loading the page
-$(onLoad)
+$(onLoadUserNav)
 
 
 
-function onLoad() {
-    $('#feed').click(showFeed)
+function onLoadUserNav() {
+    $('#feed').click(showUserFeed)
     $('#friends').click(showFriends)
     $('#joined_groups').click(showJoinedGroups)
-    $('#edit_user_a').click(showEditUserModal)
     $('#edit_user_modal').modal()
+    $('#edit_user_a').click(showEditUserModal)
     $('#create_user_a').click(showCreateUserModal)
     $('#create_user_modal').modal()
 }
 
-function showFeed() {
+function showUserFeed() {
     $('#user_menu a').removeClass('active')
     $('#feed').addClass('active')
 
@@ -21,8 +21,6 @@ function showFeed() {
 
     $.get('/students/'+student_id+'/feed/', function(response) {
         $('#user_content').html(response)
-        onLoadForms()
-        onLoadEditDelete()
     })
 
 }
@@ -108,7 +106,5 @@ function editGroup() {
 
         $('#edit_group_modal').modal('show')
     })
-
-
 
 }

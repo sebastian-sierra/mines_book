@@ -9,10 +9,11 @@
     <link href="{% static "semantic/dist/semantic.min.css" %}" rel="stylesheet"/>
     <script src = {% static "mines_book/scripts/jquery-2.1.4.min.js" %}></script>
     <script src = {% static "semantic/dist/semantic.js" %}></script>
-    <script src = {% static "mines_book/scripts/nav.js" %}></script>
     <script src = {% static "mines_book/scripts/search.js" %}></script>
     <script src = {% static "mines_book/scripts/forms.js" %}></script>
-    <script src = {% static "mines_book/scripts/edit_delete_posts_comments.js" %}></script>
+    <script src = {% static "mines_book/scripts/edit-delete-ajax.js" %}></script>
+    <script src = {% static "mines_book/scripts/user-nav.js" %}></script>
+    <script src = {% static "mines_book/scripts/group-nav.js" %}></script>
 </head>
 <body>
 
@@ -37,7 +38,7 @@
                     <a class="item" href="/students/">
                         Students
                     </a>
-                    <a class="item">
+                    <a class="item" href="/groups/">
                         Groups
                     </a>
                     <a class="item" href="/logout/">

@@ -2,14 +2,14 @@ $(onLoadForms)
 
 function onLoadForms(){
     // Submit post on submit
-    $('#post-form').on('submit', function(event){
+    $('body').on('submit', '#post-form',function(event){
         event.preventDefault();
         console.log("form submitted!")  // sanity check
-        create_post()
+        create_post(this)
     })
 
     // Submit comment on submit
-    $('.ui.reply.form.comment.form').on('submit', function(event){
+    $('body').on('submit', '.ui.reply.form.comment.form',function(event){
         event.preventDefault();
         console.log("form submitted!") // sanity check
         var comment_id = this.id
@@ -18,11 +18,20 @@ function onLoadForms(){
 }
 
 // AJAX for posting
-function create_post() {
+function create_post(form) {
     console.log("create post is working!") // sanity check
-    var user_id = $('#username').data('username')
+    var recipient_type = $(form).data('recipient_type')
+    var url
+    if(recipient_type=="group") {
+        var group_id = $('#group_id').data('group_id')
+        url = "/groups/" + group_id + "/new_post/"
+    }
+    if (recipient_type=="student") {
+        var user_id = $('#username').data('username')
+        url = "/students/" + user_id + "/new_post/"
+    }
     $.ajax({
-        url : "/students/" + user_id + "/new_post/", // the endpoint
+        url : url, // the endpoint
         type : "POST", // http method
         data : { content : $('#id_content').val() }, // data sent with the post request
 
@@ -30,7 +39,6 @@ function create_post() {
         success : function(html_response) {
             $('#new_post_form').after(html_response)
             $('#id_content').val('')
-            onLoadForms()
         }
     });
 };

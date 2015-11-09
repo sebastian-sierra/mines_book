@@ -10,7 +10,7 @@
     <a class="item {% if user != request.user %}active{% endif %}" href="/students/">
         Students
     </a>
-    <a class="item">
+    <a class="item" href="/groups/">
         Groups
     </a>
     <a class="item" href="/logout/">
@@ -83,7 +83,7 @@
     </div>
 
     <div class="ui bottom attached segment" id="user_content">
-        {% include 'mines_book/user_feed.html' %}
+        {% include 'mines_book/user_feed.html' with  recipient_type="student" %}
     </div>
 
     {% if request.user == user %}
