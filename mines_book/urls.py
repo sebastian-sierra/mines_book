@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^new_comment/(?P<post_id>[0-9]+)[/]$', views.new_comment, name="new_comment"),
     url(r'^delete_post[/]$', views.delete_post, name="delete_post"),
     url(r'^delete_comment[/]$', views.delete_comment, name="delete_comment"),
+    url(r'^edit_post/(?P<post_id>[0-9]+)[/]$', views.edit_post_to_student, name="edit_post_to_student"),
     url(r'^groups/create[/]$', views.create_group, name="create_group"),
     url(r'^groups/(?P<group_id>\w|.+)/edit[/]$', views.edit_group, name="edit_group"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

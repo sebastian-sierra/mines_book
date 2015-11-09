@@ -13,6 +13,12 @@ function onLoadEditDelete(){
         console.log(comment_id) // sanity check
         delete_comment(comment_id)
     })
+
+    $('.edit.icon.post').on('click', function(){
+        var post_id = this.id
+        console.log(post_id) // sanity check
+        edit_post(post_id)
+    })
 }
 
 function delete_post(post_primary_key){
@@ -23,8 +29,8 @@ function delete_post(post_primary_key){
             data : { postpk : post_primary_key }, // data sent with the delete request
             success : function(json) {
                 // hide the post
-              $('#post-'+post_primary_key).hide(); // hide the post on success
-              console.log("post deletion successful");
+                $('#post-'+post_primary_key).hide(); // hide the post on success
+                console.log("post deletion successful");
             }
         });
     } else {
@@ -40,11 +46,23 @@ function delete_comment(comment_primary_key){
             data : { commentpk : comment_primary_key }, // data sent with the delete request
             success : function(json) {
                 // hide the comment
-              $('#comment-'+comment_primary_key).hide(); // hide the comment on success
-              console.log("comment deletion successful");
+                $('#comment-'+comment_primary_key).hide(); // hide the comment on success
+                console.log("comment deletion successful");
             }
         });
     } else {
         return false;
     }
+};
+
+function edit_post(post_primary_key){
+    $.ajax({
+        url : "/edit_post/", // the endpoint
+        type : "POST", // http method
+        data : { postpk : post_primary_key }, // data sent with the edit request
+        success : function(json) {
+            //
+            console.log("post edit successful");
+        }
+    });
 };

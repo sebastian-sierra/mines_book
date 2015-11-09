@@ -263,3 +263,18 @@ def delete_comment(req):
             json.dumps({"nothing to see": "this isn't happening"}),
             content_type="application/json"
         )
+
+
+def edit_post_to_student(req, post_id):
+    post = Post.objects.get(post_id)
+    if req.method == 'POST':
+        form = PostForm(req.POST, instance=post)
+        if form.is_valid():
+            post.content = form.cleaned_data['content']
+            post.save()
+            context = {'post': post}
+            return render(req, 'mines_book/post_card.html', context)
+
+    edit_post_form = PostForm(instance=post)
+    context = {"form": edit_post_form, "post": post, "action": "edit"}
+    return render(req, 'mines_book/group_form.html', context)
