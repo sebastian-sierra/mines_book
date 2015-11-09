@@ -8,7 +8,7 @@
             <span class="date">{{ comment.date_created }}</span>
         </div>
         <div class="text">
-            {{ comment.content }}
+            <p id="comment-content-{{ comment.pk }}">{{ comment.content }}</p>
         </div>
         <div>
             {% if request.user == comment.author.user%}

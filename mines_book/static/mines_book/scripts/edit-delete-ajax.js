@@ -17,11 +17,19 @@ function onLoadEditDelete(){
     $('#delete_account_b').on('click', deleteAccount)
     $('body').on('click', '.right.floated.delete.group', deleteGroup)
 
-    $('.edit.icon.post').on('click', function(){
+    $('body').on('click', '.edit.icon.post', function(){
         var post_id = this.id
         console.log(post_id) // sanity check
         edit_post(post_id)
     })
+    $('body').on('click','#edit-post-submit', complete_post_edit)
+
+    $('body').on('click', '.edit.icon.comment', function(){
+        var comment_id = this.id
+        console.log(comment_id) // sanity check
+        edit_comment(comment_id)
+    })
+    $('body').on('click','#edit-comment-submit', complete_comment_edit)
 }
 
 function delete_post(post_primary_key){
@@ -64,7 +72,7 @@ function deleteAccount() {
             url : "/students/delete/", // the endpoint
             type : "DELETE", // http method
             success : function(response) {
-              window.location.replace("/login/")
+                window.location.replace("/login/")
             }
         })
     } else {
@@ -79,7 +87,7 @@ function deleteGroup() {
             url : "/groups/"+group_id, // the endpoint
             type : "DELETE", // http method
             success : function(response) {
-              $('#group-'+group_id).hide()
+                $('#group-'+group_id).hide()
             }
         })
     } else {
@@ -88,13 +96,63 @@ function deleteGroup() {
 }
 
 function edit_post(post_primary_key){
+
+    $('#post-content-'+post_primary_key).parent().next().hide()
+    var replaceHTML =
+        "<input name=\"content\" id=\"edit-post-input\" value=\""
+        + $('#post-content-'+post_primary_key).get(0).innerHTML
+        + "\">" +
+        "<button class=\"ui button primary mini\" style=\"margin-left:3%\" id=\"edit-post-submit\" " +
+        "data-id=\"" + post_primary_key + "\" type=\"submit\">Submit</button>"
+    $('#post-content-'+post_primary_key).replaceWith(replaceHTML)
+    console.log("opened post edit successfully");
+};
+
+function complete_post_edit(){
+
+    var post_primary_key = $(this).data('id')
+    var new_content = $('#edit-post-input').val()
     $.ajax({
-        url : "/edit_post/", // the endpoint
-        type : "POST", // http method
-        data : { postpk : post_primary_key }, // data sent with the edit request
+        url : "/edit_post/" + post_primary_key +"/", // the endpoint
+        type : "PUT", // http method
+        data : { content : new_content }, // data sent with the put request
         success : function(json) {
-            //
+            var replaceHTML = "<p id=\"post-content-" + post_primary_key + "\">" + json['content'] + "</p>"
+            $('#edit-post-input').replaceWith(replaceHTML)
+            $('#edit-post-submit').replaceWith()
+            $('#post-content-'+ post_primary_key).parent().next().show()
             console.log("post edit successful");
+        }
+    });
+};
+
+function edit_comment(comment_id){
+
+    $('#comment-content-'+comment_id).parent().next().hide()
+    var replaceHTML =
+        "<input name=\"content\" id=\"edit-comment-input\" value=\""
+        + $('#comment-content-'+comment_id).get(0).innerHTML
+        + "\">" +
+        "<button class=\"ui button primary mini\" style=\"margin-left:3%\" id=\"edit-comment-submit\" " +
+        "data-id=\"" + comment_id + "\" type=\"submit\">Submit</button>"
+    $('#comment-content-'+comment_id).replaceWith(replaceHTML)
+    console.log("opened comment edit successfully");
+};
+
+function complete_comment_edit(){
+
+    var comment_id = $(this).data('id')
+    var new_content = $('#edit-comment-input').val()
+    $.ajax({
+        url : "/edit_comment/" + comment_id +"/", // the endpoint
+        type : "PUT", // http method
+        data : { content : new_content }, // data sent with the put request
+        success : function(json) {
+            var replaceHTML = "<p id=\"comment-content-" + comment_id + "\">" + json['content'] + "</p>"
+            $('#edit-comment-input').replaceWith(replaceHTML)
+            $('#edit-comment-submit').replaceWith()
+            $('#comment-content-'+ comment_id).parent().next().show()
+            console.log("comment edit successful");
         }
     });
 };

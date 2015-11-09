@@ -10,7 +10,7 @@
             <span class="date">{{  post.post.date_created }}</span>
         </div>
         <div class="description">
-            <p>{{ post.post.content }}</p>
+            <p id="post-content-{{ post.post.pk }}">{{ post.post.content }}</p>
         </div>
         <div>
             {% if request.user == post.post.author.user%}
