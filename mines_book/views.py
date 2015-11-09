@@ -27,7 +27,8 @@ def login(req):
 
 def logout(req):
     auth_logout(req)
-    return render(req, 'mines_book/login.html')
+    student_form = StudentForm()
+    return render(req, 'mines_book/login.html', context={"form": student_form})
 
 
 def home(req, student_username):

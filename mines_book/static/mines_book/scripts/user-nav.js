@@ -3,12 +3,12 @@ $(onLoadUserNav)
 
 
 
-function onLoadNav() {
+function onLoadUserNav() {
     $('#feed').click(showUserFeed)
     $('#friends').click(showFriends)
     $('#joined_groups').click(showJoinedGroups)
-    $('#edit_user_a').click(showEditUserModal)
     $('#edit_user_modal').modal()
+    $('#edit_user_a').click(showEditUserModal)
     $('#create_user_a').click(showCreateUserModal)
     $('#create_user_modal').modal()
 }

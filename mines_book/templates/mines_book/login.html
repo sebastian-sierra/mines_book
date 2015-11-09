@@ -1,6 +1,21 @@
 {% extends "mines_book/index.html" %}
 {% load staticfiles %}
 
+{% block menu%}
+    <a class="item">
+        Profile
+    </a>
+    <a class="item" href="/students/">
+        Students
+    </a>
+    <a class="item" href="/groups/">
+        Groups
+    </a>
+    <a class="item active" href="/login/">
+        Login
+    </a>
+{% endblock %}
+
 {% block content %}
 
     <div class="ui middle aligned center aligned grid">
