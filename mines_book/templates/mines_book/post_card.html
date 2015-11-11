@@ -3,17 +3,18 @@
         <a>
             <img class="left floated mini ui rounded image" src="{{ post.post.author.profile_pic.url }}">
         </a>
+
         <div class="header">
-            <a>{{ post.post.author.user.first_name }}  {{ post.post.author.user.last_name }}</a>
+            <a>{{ post.post.author.user.first_name }} {{ post.post.author.user.last_name }}</a>
         </div>
         <div class="meta">
-            <span class="date">{{  post.post.date_created }}</span>
+            <span class="date">{{ post.post.date_created }}</span>
         </div>
         <div class="description">
             <p id="post-content-{{ post.post.pk }}">{{ post.post.content }}</p>
         </div>
         <div>
-            {% if request.user == post.post.author.user%}
+            {% if request.user == post.post.author.user %}
                 <a>
                     <i class="edit icon post" id="{{ post.post.pk }}"></i>
                 </a>
@@ -28,8 +29,10 @@
                     <a class="avatar circular">
                         <img src="{{ comment.author.profile_pic.url }}">
                     </a>
+
                     <div class="content">
                         <a class="author">{{ comment.author.user.first_name }} {{ comment.author.user.last_name }}</a>
+
                         <div class="metadata">
                             <span class="date">{{ comment.date_created }}</span>
                         </div>
@@ -37,7 +40,7 @@
                             {{ comment.content }}
                         </div>
                         <div>
-                            {% if request.user == comment.author.user%}
+                            {% if request.user == comment.author.user %}
                                 <a>
                                     <i class="edit icon comment" id="{{ comment.pk }}"></i>
                                 </a>
@@ -50,7 +53,8 @@
                 </div>
             {% endfor %}
             <div id="new_comment_form_for_{{ post.post.pk }}">
-                <form class="ui reply form comment form" method="post" action="/create_comment/" id="{{ post.post.pk }}">
+                <form class="ui reply form comment form" method="post" action="/create_comment/"
+                      id="{{ post.post.pk }}">
                     {% csrf_token %}
                     <div class="field">
                         <input id="id_comment_content_for_{{ post.post.pk }}" name="content">

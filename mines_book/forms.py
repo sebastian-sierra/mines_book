@@ -6,8 +6,8 @@ class StudentForm(ModelForm):
     username = CharField(max_length=30)
     first_name = CharField(max_length=30)
     last_name = CharField(max_length=30)
-    password = CharField(max_length=30, widget=PasswordInput(render_value=True))
-    confirm_password = CharField(max_length=30, widget=PasswordInput(render_value=True))
+    password = CharField(max_length=30, widget=PasswordInput(render_value=True), required=False)
+    confirm_password = CharField(max_length=30, widget=PasswordInput(render_value=True), required=False)
 
     class Meta:
         model = Student

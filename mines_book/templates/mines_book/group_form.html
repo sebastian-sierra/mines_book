@@ -1,54 +1,74 @@
 <div class="ui modal" id="{{ action }}_group_modal">
     <i class="close icon"></i>
+
     <div class="header">
         {{ action | title }} Group
     </div>
     <div class="content">
-        <form class="ui form" action="/groups{% if action == "edit" %}/{{ group.id }}{% endif %}/{{ action }}/"  enctype="multipart/form-data" method="post" id="{{ action }}_group_form">
-            {% csrf_token %}
-            <div class="field">
-                {{ form.name.label_tag }}
-                {{ form.name }}
-            </div>
-            <div class="field">
-                {{ form.description.label_tag }}
-                {{ form.description }}
-            </div>
+        <div class="ui segments">
+            <div class="ui segment">
+                <form class="ui form" action="/groups{% if action == "edit" %}/{{ group.id }}{% endif %}/{{ action }}/"
+                      enctype="multipart/form-data" method="post" id="{{ action }}_group_form">
+                    {% csrf_token %}
 
-            <div class="field">
-                {% if action == "create" %}
-                    <label>Add members:</label>
-                    <select name="members" multiple="" class="ui fluid search dropdown">
-                    </select>
-                {% endif %}
-
-                {% if action == "edit" %}
+                    <div class="ui error message"></div>
 
                     <div class="field">
-                        <div class="two fields">
-                            <div class="field">
-                                <label>Add new members:</label>
-                                <select name="members" multiple="" class="ui fluid search dropdown" id="edit_group_dropdown">
-                                </select>
-                            </div>
-
-                            <div class="field">
-                                <label>Remove members:</label>
-                                <select name="deleted_members" multiple="" class="ui fluid search dropdown" id="edit_group_dropdown_r">
-                                </select>
-                            </div>
-                        </div>
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
                     </div>
-                {% endif %}
+                    <div class="field">
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                    </div>
+
+                    <div class="field">
+                        {% if action == "create" %}
+                            <label>Add members:</label>
+                            <select name="members" multiple="" class="ui fluid search dropdown">
+                            </select>
+                        {% endif %}
+
+                        {% if action == "edit" %}
+
+                            <div class="field">
+                                <div class="two fields">
+                                    <div class="field">
+                                        <label>Add new members:</label>
+                                        <select name="members" multiple="" class="ui fluid search dropdown"
+                                                id="edit_group_dropdown">
+                                        </select>
+                                    </div>
+
+                                    <div class="field">
+                                        <label>Remove members:</label>
+                                        <select name="deleted_members" multiple="" class="ui fluid search dropdown"
+                                                id="edit_group_dropdown_r">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        {{ form.profile_pic.label_tag }}
+                        {{ form.profile_pic }}
+                    </div>
+
+                    <button class="ui fluid button" type="submit">Submit</button>
+                </form>
             </div>
 
-            <div class="field">
-                {{ form.profile_pic.label_tag }}
-                {{ form.profile_pic }}
-            </div>
-
-            <button class="ui green button" type="submit">Submit</button>
-            <div class="ui error message"></div>
+            {% if action == "edit" %}
+                <div class="ui segment">
+                    <button class="fluid negative ui button" id="delete_group_b" data-id="{{ group.id }}">
+                        <i class="delete icon"></i>
+                        Delete group
+                    </button>
+                </div>
+            {% endif %}
+        </div>
         </form>
     </div>
     <div class="actions">

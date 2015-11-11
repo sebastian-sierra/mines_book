@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 def login(req):
     if req.method == 'POST':
         username = req.POST['username']
-        password = req.POST['password']
+        password = req.POST['password_login']
         user = authenticate(username=username, password=password)
 
         if user is not None:
@@ -34,8 +34,7 @@ def logout(req):
 def home(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
-    edit_student_form = StudentForm(initial={"first_name": user.first_name, "last_name": user.last_name,
-                                             "password": "Not Changed", "confirm_password": "Not Changed2"},
+    edit_student_form = StudentForm(initial={"first_name": user.first_name, "last_name": user.last_name},
                                     instance=user.student)
     context = {"user": user, "posts": user.student.posts_received.all().order_by('-post__date_created'),
                "post_form": new_post_form, "student_form": edit_student_form}
@@ -82,8 +81,12 @@ def edit_student(req):
             student.profile_pic = form.cleaned_data['profile_pic']
             student.city = form.cleaned_data['city']
             student.country = form.cleaned_data['country']
-            if form.cleaned_data['password'] == form.cleaned_data['confirm_password']:
-                student.user.set_password(form.cleaned_data['password'])
+            password = form.cleaned_data['password']
+            if password != "" and password == form.cleaned_data['confirm_password']:
+                req.user.set_password(form.cleaned_data['password'])
+                req.user.save()
+                user = authenticate(username=student.user.username, password=password)
+                auth_login(req, user)
             student.save()
             student.user.save()
 
@@ -166,7 +169,7 @@ def group_view(req, group_id):
 
     if req.method == "DELETE":
         group.delete()
-        response_data = {'msg': 'Comment was deleted.'}
+        response_data = {'msg': 'Group was deleted.'}
         return HttpResponse(json.dumps(response_data), content_type='application/json')
 
 

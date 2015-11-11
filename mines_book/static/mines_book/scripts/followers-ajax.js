@@ -9,9 +9,9 @@ function onLoadFollowersAjax() {
 function followGroup() {
     var group_id = $('#group_id').data('group_id')
     $.ajax({
-        url : "/groups/" + group_id +"/follow", // the endpoint
-        type : "PUT", // http method
-        success : function(response) {
+        url: "/groups/" + group_id + "/follow", // the endpoint
+        type: "PUT", // http method
+        success: function (response) {
             window.location.replace("/groups/" + group_id)
         }
     })
@@ -20,9 +20,9 @@ function followGroup() {
 function unfollowGroup() {
     var group_id = $('#group_id').data('group_id')
     $.ajax({
-        url : "/groups/" + group_id +"/follow", // the endpoint
-        type : "DELETE", // http method
-        success : function(response) {
+        url: "/groups/" + group_id + "/follow", // the endpoint
+        type: "DELETE", // http method
+        success: function (response) {
             window.location.replace("/groups/" + group_id)
         }
     })

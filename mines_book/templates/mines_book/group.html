@@ -3,7 +3,7 @@
 
 {% block title %}{{ user.first_name }} {{ user.last_name }}'s Profile {% endblock %}
 
-{% block menu%}
+{% block menu %}
     <a class="item" href="/students/{{ request.user.username }}">
         Profile
     </a>
@@ -40,8 +40,8 @@
             </div>
         </div>
         <div class="ui clearing right aligned segment">
-            {% if request.user == group.admin.user%}
-                <a id ="edit_group_a">
+            {% if request.user == group.admin.user %}
+                <a id="edit_group_a">
                     <i class="edit icon"></i>
                     Edit group
                 </a>

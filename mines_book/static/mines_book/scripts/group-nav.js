@@ -2,7 +2,6 @@
 $(onLoadGroupNav)
 
 
-
 function onLoadGroupNav() {
     $('#group_feed_a').click(showGroupFeed)
     $('#group_members_a').click(showMembers)
@@ -13,24 +12,25 @@ function onLoadGroupNav() {
     $('#edit_group_form')
         .form({
             fields: {
-                name     : 'empty',
-                description   : 'empty'
+                name: 'empty',
+                description: 'empty'
             }
         })
 
     $('#edit_group_dropdown')
         .dropdown({
             apiSettings: {
-                url: '/search_students_not_in_group/'+group_id+'/{query}/'
+                url: '/search_students_not_in_group/' + group_id + '/{query}/'
             }
         })
 
     $('#edit_group_dropdown_r')
-            .dropdown({
-                apiSettings: {
-                    url: '/search_students_in_group/'+group_id+'/{query}/'
-                }
-            })
+        .dropdown({
+            apiSettings: {
+                url: '/search_students_in_group/' + group_id + '/{query}/'
+            }
+        })
+
 
     onLoadFollowersAjax()
 }
@@ -41,7 +41,7 @@ function showGroupFeed() {
 
     var group_id = $('#group_id').data('group_id')
 
-    $.get('/groups/'+group_id+'/feed/', function(response) {
+    $.get('/groups/' + group_id + '/feed/', function (response) {
         $('#group_content').html(response)
     })
 
@@ -53,7 +53,7 @@ function showMembers() {
 
     var group_id = $('#group_id').data('group_id')
 
-    $.get('/groups/'+group_id+'/members/', function(response) {
+    $.get('/groups/' + group_id + '/members/', function (response) {
         $('#group_content').html(response)
     })
 
@@ -65,7 +65,7 @@ function showFollowers() {
 
     var group_id = $('#group_id').data('group_id')
 
-    $.get('/groups/'+group_id+'/followers/', function(response) {
+    $.get('/groups/' + group_id + '/followers/', function (response) {
         $('#group_content').html(response)
     })
 

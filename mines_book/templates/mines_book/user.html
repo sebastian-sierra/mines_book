@@ -3,7 +3,7 @@
 
 {% block title %}{{ user.first_name }} {{ user.last_name }}'s Profile {% endblock %}
 
-{% block menu%}
+{% block menu %}
     <a class="item {% if user == request.user %}active{% endif %}" href="/students/{{ request.user.username }}">
         Profile
     </a>
@@ -46,8 +46,8 @@
             </div>
         </div>
         <div class="ui clearing right aligned segment">
-            {% if request.user == user%}
-                <a id ="edit_user_a">
+            {% if request.user == user %}
+                <a id="edit_user_a">
                     <i class="edit icon"></i>
                     Edit profile
                 </a>
@@ -58,8 +58,8 @@
                     Remove friend
                 </a>
             {% endif %}
-            {% if request.user != user and user.student not in request.user.student.friends.all%}
-                <a id = "add_friend_a">
+            {% if request.user != user and user.student not in request.user.student.friends.all %}
+                <a id="add_friend_a">
                     <i class="add icon"></i>
                     Add friend
                 </a>

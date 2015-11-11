@@ -7,7 +7,7 @@ function onLoad() {
                 url: '/search/{query}/'
             },
             type: 'category',
-            searchFields   : [
+            searchFields: [
                 'title',
                 'url'
             ]

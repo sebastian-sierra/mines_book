@@ -9,9 +9,9 @@ function onLoadFriendsAjax() {
 function addFriend() {
     var friend_username = $('#username').data('username')
     $.ajax({
-        url : "/students/" + friend_username +"/friend", // the endpoint
-        type : "PUT", // http method
-        success : function(response) {
+        url: "/students/" + friend_username + "/friend", // the endpoint
+        type: "PUT", // http method
+        success: function (response) {
             window.location.replace("/students/" + friend_username)
         }
     })
@@ -20,9 +20,9 @@ function addFriend() {
 function removeFriend() {
     var friend_username = $('#username').data('username')
     $.ajax({
-        url : "/students/" + friend_username +"/friend", // the endpoint
-        type : "DELETE", // http method
-        success : function(response) {
+        url: "/students/" + friend_username + "/friend", // the endpoint
+        type: "DELETE", // http method
+        success: function (response) {
             window.location.replace("/students/" + friend_username)
         }
     })
