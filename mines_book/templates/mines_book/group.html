@@ -47,13 +47,13 @@
                 </a>
             {% endif %}
             {% if user.student not in group.followers.all %}
-                <a>
+                <a id="follow_group_a">
                     <i class="follow icon"></i>
                     Follow group
                 </a>
             {% endif %}
             {% if user.student in group.followers.all %}
-                <a>
+                <a id="unfollow_group_a">
                     <i class="follow icon"></i>
                     Unfollow group
                 </a>

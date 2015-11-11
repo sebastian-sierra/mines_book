@@ -212,6 +212,17 @@ def group_followers(req, group_id):
     return render(req, 'mines_book/student_cards.html', context)
 
 
+def follow_view(req, group_id):
+    group = Group.objects.get(pk=group_id)
+    if req.method == "PUT":
+        group.followers.add(req.user.student)
+        msg = {"status": "success"}
+    elif req.method == "DELETE":
+        group.followers.remove(req.user.student)
+        msg = {"status": "success"}
+    return HttpResponse(json.dumps(msg), content_type='application/json')
+
+
 def new_post_to_group(req, group_id):
     user = req.user
     if req.method == 'POST':
@@ -350,7 +361,7 @@ def edit_post(req, post_id):
         new_content = QueryDict(req.body).get('content')
         post.content = new_content
         post.save()
-        msg = {'content': post.content }
+        msg = {'content': post.content}
         return HttpResponse(json.dumps(msg), content_type='application/json')
 
 
@@ -360,5 +371,5 @@ def edit_comment(req, comment_id):
         new_content = QueryDict(req.body).get('content')
         comment.content = new_content
         comment.save()
-        msg = {'content': comment.content }
+        msg = {'content': comment.content}
         return HttpResponse(json.dumps(msg), content_type='application/json')

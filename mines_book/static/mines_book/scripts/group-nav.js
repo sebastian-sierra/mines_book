@@ -24,6 +24,8 @@ function onLoadGroupNav() {
                 url: '/search_students_not_in_group/'+group_id+'/{query}/'
             }
         })
+
+    onLoadFollowersAjax()
 }
 
 function showGroupFeed() {

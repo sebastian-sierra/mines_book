@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^groups/(?P<group_id>\w|.+)/new_post[/]$', views.new_post_to_group, name="new_post_to_group"),
     url(r'^groups/(?P<group_id>\w|.+)/edit[/]$', views.edit_group, name="edit_group"),
     url(r'^groups/(?P<group_id>\w|.+)/feed[/]$', views.group_feed, name="group_feed"),
+    url(r'^groups/(?P<group_id>\w|.+)/follow[/]$', views.follow_view, name="follow_view"),
     url(r'^groups/(?P<group_id>\w|.+)[/]$', views.group_view, name="group_view"),
     url(r'^groups[/]$', views.get_all_groups, name="all_groups"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
