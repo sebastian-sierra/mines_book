@@ -342,3 +342,23 @@ def delete_comment(req):
             json.dumps({"nothing to see": "this isn't happening"}),
             content_type="application/json"
         )
+
+
+def edit_post(req, post_id):
+    post = Post.objects.get(pk=post_id)
+    if req.method == 'PUT':
+        new_content = QueryDict(req.body).get('content')
+        post.content = new_content
+        post.save()
+        msg = {'content': post.content }
+        return HttpResponse(json.dumps(msg), content_type='application/json')
+
+
+def edit_comment(req, comment_id):
+    comment = Comment.objects.get(pk=comment_id)
+    if req.method == 'PUT':
+        new_content = QueryDict(req.body).get('content')
+        comment.content = new_content
+        comment.save()
+        msg = {'content': comment.content }
+        return HttpResponse(json.dumps(msg), content_type='application/json')
