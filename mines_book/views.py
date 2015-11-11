@@ -1,7 +1,5 @@
-from django.core import serializers
-from django.core.urlresolvers import reverse
-from django.db.models import ImageField
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse, QueryDict
+
+from django.http import HttpResponse, QueryDict
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -9,6 +7,7 @@ from forms import GroupForm, PostForm, CommentForm, StudentForm
 from models import Group, Post, PostToStudent, Student, Comment, PostToGroup
 from utils import serialize_groups, serialize_students, serialize_students_select
 import json
+from django.contrib.auth.decorators import login_required
 
 
 def login(req):
@@ -25,12 +24,14 @@ def login(req):
     return render(req, 'mines_book/login.html', context={"form": student_form})
 
 
+@login_required
 def logout(req):
     auth_logout(req)
     student_form = StudentForm()
     return render(req, 'mines_book/login.html', context={"form": student_form})
 
 
+@login_required
 def home(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
@@ -69,6 +70,7 @@ def create_student(req):
     return redirect('login')
 
 
+@login_required
 def edit_student(req):
     if req.method == "POST":
         form = StudentForm(req.POST, req.FILES, instance=req.user.student)
@@ -89,6 +91,7 @@ def edit_student(req):
     return redirect('home', student_username=req.user.username)
 
 
+@login_required
 def delete_student(req):
     user = req.user
     if req.method == "DELETE":
@@ -97,6 +100,7 @@ def delete_student(req):
     return redirect('home', student_username=user.username)
 
 
+@login_required
 def friend_view(req, student_username):
     if req.method == "PUT":
         friend = User.objects.get(username=student_username).student
@@ -107,16 +111,19 @@ def friend_view(req, student_username):
     return redirect('home', student_username=friend.user.username)
 
 
+@login_required
 def get_all_students(req):
     students = Student.objects.all()
     return render(req, "mines_book/all_students.html", {"students": students})
 
 
+@login_required
 def get_all_groups(req):
     groups = Group.objects.all()
     return render(req, "mines_book/all_groups.html", {"groups": groups})
 
 
+@login_required
 def user_feed(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
@@ -125,12 +132,14 @@ def user_feed(req, student_username):
     return render(req, 'mines_book/user_feed.html', context)
 
 
+@login_required
 def user_friends(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     context = {"students": user.student.friends.all()}
     return render(req, 'mines_book/student_cards.html', context)
 
 
+@login_required
 def user_joined_groups(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_group_form = GroupForm()
@@ -138,6 +147,7 @@ def user_joined_groups(req, student_username):
     return render(req, 'mines_book/group_cards.html', context)
 
 
+@login_required
 def group_view(req, group_id):
     group = Group.objects.get(pk=group_id)
     if req.method == "GET":
@@ -153,6 +163,7 @@ def group_view(req, group_id):
         return HttpResponse(json.dumps(response_data), content_type='application/json')
 
 
+@login_required
 def create_group(req):
     user = req.user
     if req.method == 'POST':
@@ -174,6 +185,7 @@ def create_group(req):
     return redirect('home', student_username=user.username)
 
 
+@login_required
 def edit_group(req, group_id):
     group = Group.objects.get(pk=group_id)
     if req.method == "POST":
@@ -192,6 +204,7 @@ def edit_group(req, group_id):
     return render(req, 'mines_book/group_form.html', context)
 
 
+@login_required
 def group_feed(req, group_id):
     posts = Group.objects.get(pk=group_id).posts_received.order_by("-post__date_created")
     new_post_form = PostForm()
@@ -200,18 +213,21 @@ def group_feed(req, group_id):
     return render(req, 'mines_book/user_feed.html', context)
 
 
+@login_required
 def group_members(req, group_id):
     members = Group.objects.get(pk=group_id).members.all()
     context = {"students": members}
     return render(req, 'mines_book/student_cards.html', context)
 
 
+@login_required
 def group_followers(req, group_id):
     followers = Group.objects.get(pk=group_id).followers.all()
     context = {"students": followers}
     return render(req, 'mines_book/student_cards.html', context)
 
 
+@login_required
 def follow_view(req, group_id):
     group = Group.objects.get(pk=group_id)
     if req.method == "PUT":
@@ -223,6 +239,7 @@ def follow_view(req, group_id):
     return HttpResponse(json.dumps(msg), content_type='application/json')
 
 
+@login_required
 def new_post_to_group(req, group_id):
     user = req.user
     if req.method == 'POST':
@@ -241,6 +258,7 @@ def new_post_to_group(req, group_id):
     return redirect('group_view', group_id=group_id)
 
 
+@login_required
 def search(req, search_param):
     students = User.objects.filter(username__contains=search_param)
     groups = Group.objects.filter(name__contains=search_param)
@@ -260,6 +278,7 @@ def search(req, search_param):
     return HttpResponse(json.dumps(d), content_type='application/json')
 
 
+@login_required
 def get_students_usernames(req, search_param):
     students = User.objects.filter(username__startswith=search_param).exclude(username=req.user.username)
     serialize_students_select(students)
@@ -270,6 +289,7 @@ def get_students_usernames(req, search_param):
     return HttpResponse(json.dumps(r), content_type='application/json')
 
 
+@login_required
 def get_students_not_in_group(req, group_id, search_param):
     students_not_in = Group.objects.get(pk=group_id).members.all()
     students = User.objects.filter(username__startswith=search_param).exclude(student__in=students_not_in)
@@ -281,6 +301,7 @@ def get_students_not_in_group(req, group_id, search_param):
     return HttpResponse(json.dumps(r), content_type='application/json')
 
 
+@login_required
 def new_post_to_student(req, student_username):
     user = req.user
     if req.method == 'POST':
@@ -299,6 +320,7 @@ def new_post_to_student(req, student_username):
     return redirect('home', student_username=user.username)
 
 
+@login_required
 def new_comment(req, post_id):
     user = req.user
     if req.method == 'POST':
@@ -317,6 +339,7 @@ def new_comment(req, post_id):
     return redirect('home', student_username=user.username)
 
 
+@login_required
 def delete_post(req):
     if req.method == 'DELETE':
 
@@ -336,6 +359,7 @@ def delete_post(req):
         )
 
 
+@login_required
 def delete_comment(req):
     if req.method == 'DELETE':
 
@@ -355,6 +379,7 @@ def delete_comment(req):
         )
 
 
+@login_required
 def edit_post(req, post_id):
     post = Post.objects.get(pk=post_id)
     if req.method == 'PUT':
@@ -365,6 +390,7 @@ def edit_post(req, post_id):
         return HttpResponse(json.dumps(msg), content_type='application/json')
 
 
+@login_required
 def edit_comment(req, comment_id):
     comment = Comment.objects.get(pk=comment_id)
     if req.method == 'PUT':
