@@ -147,6 +147,14 @@ def user_joined_groups(req, student_username):
 
 
 @login_required
+def user_followed_groups(req, student_username):
+    user = User.objects.filter(username=student_username)[0]
+    new_group_form = GroupForm()
+    context = {"groups": user.student.groups_followed.all(), "form": new_group_form, "student": user, "action": "create"}
+    return render(req, 'mines_book/group_cards.html', context)
+
+
+@login_required
 def group_view(req, group_id):
     group = Group.objects.get(pk=group_id)
     if req.method == "GET":

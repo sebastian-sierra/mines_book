@@ -7,6 +7,7 @@ function onLoadUserNav() {
     $('#feed').click(showUserFeed)
     $('#friends').click(showFriends)
     $('#joined_groups').click(showJoinedGroups)
+    $('#followed_groups').click(showFollowedGroups)
     $('#edit_user_modal').modal()
     $('#edit_user_a').click(showEditUserModal)
     $('#create_user_a').click(showCreateUserModal)
@@ -45,6 +46,39 @@ function showJoinedGroups() {
     var student_id = $('#username').data('username')
 
     $.get('/students/'+student_id+'/joined_groups/', function(response) {
+        $('#user_content').html(response)
+        $('.create_group').click(showNewGroupModal)
+        $('.edit_group').click(editGroup)
+        $('.ui.modal').modal()
+
+        $('.ui.form')
+            .form({
+                fields: {
+                    name     : 'empty',
+                    description   : 'empty',
+                    profile_pic : 'empty'
+                }
+            })
+
+        $('.ui.fluid.search.dropdown')
+            .dropdown({
+                apiSettings: {
+                    url: '/search_students_usernames/{query}/'
+                }
+            })
+
+    })
+
+
+}
+
+function showFollowedGroups() {
+    $('#user_menu a').removeClass('active')
+    $('#followed_groups').addClass('active')
+
+    var student_id = $('#username').data('username')
+
+    $.get('/students/'+student_id+'/followed_groups/', function(response) {
         $('#user_content').html(response)
         $('.create_group').click(showNewGroupModal)
         $('.edit_group').click(editGroup)
