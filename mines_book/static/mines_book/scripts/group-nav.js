@@ -25,6 +25,13 @@ function onLoadGroupNav() {
             }
         })
 
+    $('#edit_group_dropdown_r')
+            .dropdown({
+                apiSettings: {
+                    url: '/search_students_in_group/'+group_id+'/{query}/'
+                }
+            })
+
     onLoadFollowersAjax()
 }
 

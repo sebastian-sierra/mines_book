@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^search/(?P<search_param>\w|.+)[/]$', views.search),
     url(r'^search_students_usernames/(?P<search_param>\w|.+)[/]$', views.get_students_usernames),
     url(r'^search_students_not_in_group/(?P<group_id>[0-9]+)/(?P<search_param>\w|.+)[/]$', views.get_students_not_in_group),
+    url(r'^search_students_in_group/(?P<group_id>[0-9]+)/(?P<search_param>\w|.+)[/]$', views.get_students_in_group),
     url(r'^students/(?P<student_username>\w|.+)/friend[/]$', views.friend_view, name="friend_view"),
     url(r'^students/(?P<student_username>\w|.+)/feed[/]$', views.user_feed, name="user_feed"),
     url(r'^students/(?P<student_username>\w|.+)/friends[/]$', views.user_friends, name="user_feed"),

@@ -16,6 +16,7 @@ class StudentForm(ModelForm):
 
 class GroupForm(ModelForm):
     members = ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
+    deleted_members = ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
 
     class Meta:
         model = Group

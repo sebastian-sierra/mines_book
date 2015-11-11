@@ -105,6 +105,13 @@ function editGroup() {
                 }
             })
 
+        $('#edit_group_dropdown_r')
+            .dropdown({
+                apiSettings: {
+                    url: '/search_students_in_group/'+group_id+'/{query}/'
+                }
+            })
+
         $('#edit_group_modal').modal('show')
     })
 

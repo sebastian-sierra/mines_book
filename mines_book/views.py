@@ -1,4 +1,3 @@
-
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -195,6 +194,7 @@ def edit_group(req, group_id):
             group.description = form.cleaned_data['description']
             group.profile_pic = form.cleaned_data['profile_pic']
             group.members.add(req.user.student, *form.cleaned_data['members'])
+            group.members.remove(*form.cleaned_data['deleted_members'])
             group.save()
             return redirect('group_view', group_id=group.id)
 
@@ -281,6 +281,19 @@ def search(req, search_param):
 @login_required
 def get_students_usernames(req, search_param):
     students = User.objects.filter(username__startswith=search_param).exclude(username=req.user.username)
+    serialize_students_select(students)
+    r = {
+        "success": "true",
+        "results": serialize_students_select(students)
+    }
+    return HttpResponse(json.dumps(r), content_type='application/json')
+
+
+@login_required
+def get_students_in_group(req, group_id, search_param):
+    students_in = Group.objects.get(pk=group_id).members.all()
+    students = User.objects.filter(username__startswith=search_param).filter(student__in=students_in).exclude(
+        username=req.user.username)
     serialize_students_select(students)
     r = {
         "success": "true",

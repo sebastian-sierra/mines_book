@@ -35,7 +35,12 @@
                     </div>
 
                     <div class="field">
-                        <label>Change password</label>
+                        {% if action == "create"%}
+                            <label>Password</label>
+                        {% endif %}
+                        {% if action == "edit"%}
+                            <label>Change password</label>
+                        {% endif %}
                         <div class="two fields">
                             <div class="field">
                                 {{ form.password }}
