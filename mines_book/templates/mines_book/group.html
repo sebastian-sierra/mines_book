@@ -10,7 +10,7 @@
     <a class="item" href="/students/">
         Students
     </a>
-    <a class="item" href="/groups/">
+    <a class="item active" href="/groups/">
         Groups
     </a>
     <a class="item" href="/logout/">
@@ -50,6 +50,12 @@
                 <a>
                     <i class="follow icon"></i>
                     Follow group
+                </a>
+            {% endif %}
+            {% if user.student in group.followers.all %}
+                <a>
+                    <i class="follow icon"></i>
+                    Unfollow group
                 </a>
             {% endif %}
         </div>

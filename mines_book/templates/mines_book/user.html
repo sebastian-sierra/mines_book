@@ -53,13 +53,13 @@
                 </a>
             {% endif %}
             {% if user.student in request.user.student.friends.all %}
-                <a>
+                <a id="delete_friend_a">
                     <i class="remove icon"></i>
                     Remove friend
                 </a>
             {% endif %}
             {% if request.user != user and user.student not in request.user.student.friends.all%}
-                <a>
+                <a id = "add_friend_a">
                     <i class="add icon"></i>
                     Add friend
                 </a>

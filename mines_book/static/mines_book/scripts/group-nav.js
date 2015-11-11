@@ -44,7 +44,7 @@ function showMembers() {
 
     var group_id = $('#group_id').data('group_id')
 
-    $.get('/group/'+group_id+'/members/', function(response) {
+    $.get('/groups/'+group_id+'/members/', function(response) {
         $('#group_content').html(response)
     })
 

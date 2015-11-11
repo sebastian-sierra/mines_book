@@ -11,6 +11,7 @@ function onLoadUserNav() {
     $('#edit_user_a').click(showEditUserModal)
     $('#create_user_a').click(showCreateUserModal)
     $('#create_user_modal').modal()
+    onLoadFriendsAjax()
 }
 
 function showUserFeed() {

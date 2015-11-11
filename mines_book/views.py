@@ -97,9 +97,24 @@ def delete_student(req):
     return redirect('home', student_username=user.username)
 
 
+def friend_view(req, student_username):
+    if req.method == "PUT":
+        friend = User.objects.get(username=student_username).student
+        req.user.student.friends.add(friend)
+    elif req.method == "DELETE":
+        friend = User.objects.get(username=student_username).student
+        req.user.student.friends.remove(friend)
+    return redirect('home', student_username=friend.user.username)
+
+
 def get_all_students(req):
     students = Student.objects.all()
     return render(req, "mines_book/all_students.html", {"students": students})
+
+
+def get_all_groups(req):
+    groups = Group.objects.all()
+    return render(req, "mines_book/all_groups.html", {"groups": groups})
 
 
 def user_feed(req, student_username):
@@ -175,6 +190,26 @@ def edit_group(req, group_id):
     edit_group_form = GroupForm(instance=group)
     context = {"form": edit_group_form, "group": group, "action": "edit"}
     return render(req, 'mines_book/group_form.html', context)
+
+
+def group_feed(req, group_id):
+    posts = Group.objects.get(pk=group_id).posts_received.order_by("-post__date_created")
+    new_post_form = PostForm()
+    context = {"posts": posts,
+               "post_form": new_post_form, "recipient_type": "group"}
+    return render(req, 'mines_book/user_feed.html', context)
+
+
+def group_members(req, group_id):
+    members = Group.objects.get(pk=group_id).members.all()
+    context = {"students": members}
+    return render(req, 'mines_book/student_cards.html', context)
+
+
+def group_followers(req, group_id):
+    followers = Group.objects.get(pk=group_id).followers.all()
+    context = {"students": followers}
+    return render(req, 'mines_book/student_cards.html', context)
 
 
 def new_post_to_group(req, group_id):
