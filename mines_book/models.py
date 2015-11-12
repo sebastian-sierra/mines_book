@@ -4,12 +4,24 @@ from django.contrib.auth.models import User
 
 class Student(models.Model):
     user = models.OneToOneField(User)
-    option = models.CharField(max_length=6)
     profile_pic = models.ImageField(upload_to="students_profile_pics", null=True)
-    prom = models.CharField(max_length=5)
+    prom = models.CharField(max_length=4)
     city = models.CharField(max_length=20, null=True)
     country = models.CharField(max_length=20, null=True)
     friends = models.ManyToManyField('self')
+    OPTION_CHOICES = (
+        ('GSI', 'GSI'),
+        ('OMTI', 'OMTI'),
+        ('GIPAD', 'GIPAD'),
+        ('QSF', 'QSF'),
+        ('GOPL', 'GOPL'),
+        ('AII', 'AII'),
+        ('NSTE', 'NSTE'),
+        ('STAR', 'STAR'),
+        ('GSE', 'GSE'),
+        ('GE', 'GE'),
+    )
+    option = models.CharField(max_length=6, choices=OPTION_CHOICES)
 
     def __unicode__(self):
         return u'%s' % self.user.username

@@ -70,7 +70,7 @@ function delete_comment(comment_primary_key) {
 function deleteAccount() {
     if (confirm('Are you sure you want to delete your account?') == true) {
         $.ajax({
-            url: "/students/delete/", // the endpoint
+            url: "/students/", // the endpoint
             type: "DELETE", // http method
             success: function (response) {
                 window.location.replace("/login/")

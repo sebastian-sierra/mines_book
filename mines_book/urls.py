@@ -43,11 +43,8 @@ urlpatterns = [
     url(r'^students/(?P<student_username>\w|.+)/joined_groups[/]$', views.user_joined_groups, name="user_joined_groups"),
     url(r'^students/(?P<student_username>\w|.+)/followed_groups[/]$', views.user_followed_groups, name="user_followed_groups"),
     url(r'^students/(?P<student_username>\w|.+)/new_post[/]$', views.new_post_to_student, name="new_post_to_student"),
-    url(r'^students/edit[/]$', views.edit_student, name="edit_student"),
-    url(r'^students/create[/]$', views.create_student, name="create_student"),
-    url(r'^students/delete[/]$', views.delete_student, name="delete_student"),
-    url(r'^students/(?P<student_username>\w|.+)[/]$', views.home, name="home"),
-    url(r'^students[/]$', views.get_all_students, name="all_students"),
+    url(r'^students/(?P<student_username>\w|.+)[/]$', views.student_view, name="student_view"),
+    url(r'^students[/]$', views.students_view, name="students_view"),
 
     # Routes for comments and posts
     url(r'^new_comment/(?P<post_id>[0-9]+)[/]$', views.new_comment, name="new_comment"),

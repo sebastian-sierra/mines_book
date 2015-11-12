@@ -1,36 +1,52 @@
-def serialize_students(students):
-    response = []
-
+def make_search_dict(students, groups):
+    serialized_students = []
     for student in students:
         new_student = {
             "title": student.username,
             "url": "/students/%s" % student.username,
             "image": student.student.profile_pic.url
         }
-        response.append(new_student)
-    return response
+        serialized_students.append(new_student)
 
-
-def serialize_groups(groups):
-    response = []
-
+    serialized_groups = []
     for group in groups:
         new_group = {
             "title": group.name,
             "url": "/groups/%s" % group.id,
             "image": group.profile_pic.url
         }
-        response.append(new_group)
-    return response
+        serialized_groups.append(new_group)
+
+    response_dict = {
+        "results": {
+            "category1": {
+                "name": "Students",
+                "results": serialized_students
+            },
+            "category2": {
+                "name": "Groups",
+                "results": serialized_groups
+            }
+        },
+
+    }
+
+    return response_dict
 
 
-def serialize_students_select(students):
-    response = []
-
+def make_dropdown_dict(students):
+    serialized_students = []
     for student in students:
         new_student = {
             "name": student.username,
             "value": student.student.id
         }
-        response.append(new_student)
-    return response
+        serialized_students.append(new_student)
+
+    response_dict = {
+        "success": "true",
+        "results": serialized_students
+    }
+
+    return response_dict
+

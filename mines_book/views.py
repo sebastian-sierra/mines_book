@@ -4,12 +4,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from forms import GroupForm, PostForm, CommentForm, StudentForm
 from models import Group, Post, PostToStudent, Student, Comment, PostToGroup
-from utils import serialize_groups, serialize_students, serialize_students_select
+from utils import make_search_dict, make_dropdown_dict
 import json
 from django.contrib.auth.decorators import login_required
 
 
 def login(req):
+    if req.user.is_authenticated():
+        return redirect('student_view', student_username=req.user.username)
+
     if req.method == 'POST':
         username = req.POST['username']
         password = req.POST['password_login']
@@ -17,7 +20,7 @@ def login(req):
 
         if user is not None:
             auth_login(req, user)
-            return redirect('home', student_username=username)
+            return redirect('student_view', student_username=username)
 
     student_form = StudentForm()
     return render(req, 'mines_book/login.html', context={"form": student_form})
@@ -31,7 +34,7 @@ def logout(req):
 
 
 @login_required
-def home(req, student_username):
+def student_view(req, student_username):
     try:
         user = User.objects.filter(username=student_username)[0]
     except:
@@ -44,65 +47,61 @@ def home(req, student_username):
     return render(req, 'mines_book/user.html', context)
 
 
-def create_student(req):
+def students_view(req):
     if req.method == "POST":
-        form = StudentForm(req.POST, req.FILES)
-        password = req.POST['password']
-        if form.is_valid() and password == form.cleaned_data['confirm_password']:
-            username = form.cleaned_data['username']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            user = User.objects.create(username=username, first_name=first_name, last_name=last_name)
-            user.set_password(password)
-            option = form.cleaned_data['option']
-            prom = form.cleaned_data['prom']
-            profile_pic = form.cleaned_data['profile_pic']
-            city = form.cleaned_data['city']
-            country = form.cleaned_data['country']
-            student = Student.objects.create(user=user, option=option, prom=prom, profile_pic=profile_pic, city=city,
-                                             country=country)
-            user.save()
-            student.save()
-            user = authenticate(username=username, password=password)
-            auth_login(req, user)
-
-            return redirect('home', student_username=user.username)
-
-    return redirect('login')
-
-
-@login_required
-def edit_student(req):
-    if req.method == "POST":
-        form = StudentForm(req.POST, req.FILES, instance=req.user.student)
-        if form.is_valid():
-            student = req.user.student
-            student.user.first_name = form.cleaned_data['first_name']
-            student.user.last_name = form.cleaned_data['last_name']
-            student.option = form.cleaned_data['option']
-            student.prom = form.cleaned_data['prom']
-            student.profile_pic = form.cleaned_data['profile_pic']
-            student.city = form.cleaned_data['city']
-            student.country = form.cleaned_data['country']
-            password = form.cleaned_data['password']
-            if password != "" and password == form.cleaned_data['confirm_password']:
-                req.user.set_password(form.cleaned_data['password'])
-                req.user.save()
-                user = authenticate(username=student.user.username, password=password)
+        if not req.user.is_authenticated():
+            form = StudentForm(req.POST, req.FILES)
+            password = req.POST['password']
+            if form.is_valid() and password == form.cleaned_data['confirm_password']:
+                username = form.cleaned_data['username']
+                first_name = form.cleaned_data['first_name']
+                last_name = form.cleaned_data['last_name']
+                user = User.objects.create(username=username, first_name=first_name, last_name=last_name)
+                user.set_password(password)
+                option = form.cleaned_data['option']
+                prom = form.cleaned_data['prom']
+                profile_pic = form.cleaned_data['profile_pic']
+                city = form.cleaned_data['city']
+                country = form.cleaned_data['country']
+                student = Student.objects.create(user=user, option=option, prom=prom, profile_pic=profile_pic,
+                                                 city=city,
+                                                 country=country)
+                user.save()
+                student.save()
+                user = authenticate(username=username, password=password)
                 auth_login(req, user)
-            student.save()
-            student.user.save()
 
-    return redirect('home', student_username=req.user.username)
+        if req.user.is_authenticated():
+            form = StudentForm(req.POST, req.FILES, instance=req.user.student)
+            if form.is_valid():
+                student = req.user.student
+                student.user.first_name = form.cleaned_data['first_name']
+                student.user.last_name = form.cleaned_data['last_name']
+                student.option = form.cleaned_data['option']
+                student.prom = form.cleaned_data['prom']
+                student.profile_pic = form.cleaned_data['profile_pic']
+                student.city = form.cleaned_data['city']
+                student.country = form.cleaned_data['country']
+                password = form.cleaned_data['password']
+                if password != "" and password == form.cleaned_data['confirm_password']:
+                    req.user.set_password(form.cleaned_data['password'])
+                    req.user.save()
+                    user = authenticate(username=student.user.username, password=password)
+                    auth_login(req, user)
+                student.save()
+                student.user.save()
 
+        return redirect('student_view', student_username=student.user.username)
 
-@login_required
-def delete_student(req):
-    user = req.user
     if req.method == "DELETE":
-        user.delete()
+        req.user.delete()
         return redirect('login')
-    return redirect('home', student_username=user.username)
+
+    if not req.user.is_authenticated():
+        return redirect('login')
+
+    students = Student.objects.all()
+    return render(req, "mines_book/all_students.html", {"students": students})
 
 
 @login_required
@@ -113,13 +112,7 @@ def friend_view(req, student_username):
     elif req.method == "DELETE":
         friend = User.objects.get(username=student_username).student
         req.user.student.friends.remove(friend)
-    return redirect('home', student_username=friend.user.username)
-
-
-@login_required
-def get_all_students(req):
-    students = Student.objects.all()
-    return render(req, "mines_book/all_students.html", {"students": students})
+    return redirect('student_view', student_username=friend.user.username)
 
 
 @login_required
@@ -197,13 +190,9 @@ def create_group(req):
                 group.members.add(user.student, *members)
             else:
                 group.members.add(user.student)
+            return redirect('group_view', group_id=group.id)
 
-            group_form = GroupForm(instance=group)
-            post_form = PostForm(instance=group)
-            posts = group.posts_received.order_by("-post__date_created")
-            return render(req, 'mines_book/group.html',
-                          context={"group": group, "group_form": group_form, "post_form": post_form, "posts": posts})
-    return redirect('home', student_username=user.username)
+    return redirect('student_view', student_username=user.username)
 
 
 @login_required
@@ -284,20 +273,8 @@ def new_post_to_group(req, group_id):
 def search(req, search_param):
     students = User.objects.filter(username__contains=search_param)
     groups = Group.objects.filter(name__contains=search_param)
-    d = {
-        "results": {
-            "category1": {
-                "name": "Students",
-                "results": serialize_students(students)
-            },
-            "category2": {
-                "name": "Groups",
-                "results": serialize_groups(groups)
-            }
-        },
-
-    }
-    return HttpResponse(json.dumps(d), content_type='application/json')
+    search_dict = make_search_dict(students, groups)
+    return HttpResponse(json.dumps(search_dict), content_type='application/json')
 
 
 @login_required
@@ -305,10 +282,7 @@ def get_students_usernames(req, search_param=None):
     students = User.objects.exclude(username=req.user.username)
     if search_param is not None:
         students = students.filter(username__startswith=search_param)
-    r = {
-        "success": "true",
-        "results": serialize_students_select(students)
-    }
+    r = make_dropdown_dict(students)
     return HttpResponse(json.dumps(r), content_type='application/json')
 
 
@@ -318,10 +292,7 @@ def get_students_in_group(req, group_id, search_param=None):
     users_in = User.objects.filter(student__in=students_in)
     if search_param is not None:
         users_in = users_in.filter(username__startswith=search_param)
-    r = {
-        "success": "true",
-        "results": serialize_students_select(users_in)
-    }
+    r = make_dropdown_dict(users_in)
     return HttpResponse(json.dumps(r), content_type='application/json')
 
 
@@ -331,10 +302,7 @@ def get_students_not_in_group(req, group_id, search_param=None):
     students_not_in = User.objects.exclude(student__in=students_in)
     if search_param is not None:
         students_not_in.filter(username__startswith=search_param)
-    r = {
-        "success": "true",
-        "results": serialize_students_select(students_not_in)
-    }
+    r = make_dropdown_dict(students_not_in)
     return HttpResponse(json.dumps(r), content_type='application/json')
 
 
@@ -354,7 +322,7 @@ def new_post_to_student(req, student_username):
 
             context = {'post': post_to_student}
             return render(req, 'mines_book/post_card.html', context)
-    return redirect('home', student_username=user.username)
+    return redirect('student_view', student_username=user.username)
 
 
 @login_required
@@ -373,7 +341,7 @@ def new_comment(req, post_id):
 
             context = {"comment": comment}
             return render(req, 'mines_book/comments.html', context)
-    return redirect('home', student_username=user.username)
+    return redirect('student_view', student_username=user.username)
 
 
 @login_required
