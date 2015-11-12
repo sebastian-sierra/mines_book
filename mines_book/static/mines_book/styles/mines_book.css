@@ -1,0 +1,8 @@
+.ui.list>a.item i.icon {
+    cursor : pointer;
+    color : #4183C4;
+}
+
+.ui.list>a.item:hover .icon {
+    color : #4183c4;
+}

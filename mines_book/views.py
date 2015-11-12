@@ -1,4 +1,4 @@
-from django.http import HttpResponse, QueryDict
+from django.http import HttpResponse, QueryDict, Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -32,7 +32,10 @@ def logout(req):
 
 @login_required
 def home(req, student_username):
-    user = User.objects.filter(username=student_username)[0]
+    try:
+        user = User.objects.filter(username=student_username)[0]
+    except:
+        raise Http404("The user does not exist")
     new_post_form = PostForm()
     edit_student_form = StudentForm(initial={"first_name": user.first_name, "last_name": user.last_name},
                                     instance=user.student)
@@ -131,7 +134,7 @@ def user_feed(req, student_username):
     new_post_form = PostForm()
     context = {"user": user, "posts": user.student.posts_received.all().order_by('-post__date_created'),
                "post_form": new_post_form, "recipient_type": "student"}
-    return render(req, 'mines_book/user_feed.html', context)
+    return render(req, 'mines_book/feed.html', context)
 
 
 @login_required
@@ -153,13 +156,17 @@ def user_joined_groups(req, student_username):
 def user_followed_groups(req, student_username):
     user = User.objects.filter(username=student_username)[0]
     new_group_form = GroupForm()
-    context = {"groups": user.student.groups_followed.all(), "form": new_group_form, "student": user, "action": "create"}
+    context = {"groups": user.student.groups_followed.all(), "form": new_group_form, "student": user,
+               "action": "create"}
     return render(req, 'mines_book/group_cards.html', context)
 
 
 @login_required
 def group_view(req, group_id):
-    group = Group.objects.get(pk=group_id)
+    try:
+        group = Group.objects.get(pk=group_id)
+    except:
+        raise Http404("The group does not exist")
     if req.method == "GET":
         group_form = GroupForm(instance=group)
         post_form = PostForm(instance=group)
@@ -191,7 +198,11 @@ def create_group(req):
             else:
                 group.members.add(user.student)
 
-            return redirect('home', student_username=user.username)
+            group_form = GroupForm(instance=group)
+            post_form = PostForm(instance=group)
+            posts = group.posts_received.order_by("-post__date_created")
+            return render(req, 'mines_book/group.html',
+                          context={"group": group, "group_form": group_form, "post_form": post_form, "posts": posts})
     return redirect('home', student_username=user.username)
 
 
@@ -221,7 +232,7 @@ def group_feed(req, group_id):
     new_post_form = PostForm()
     context = {"posts": posts,
                "post_form": new_post_form, "recipient_type": "group"}
-    return render(req, 'mines_book/user_feed.html', context)
+    return render(req, 'mines_book/feed.html', context)
 
 
 @login_required
@@ -290,9 +301,10 @@ def search(req, search_param):
 
 
 @login_required
-def get_students_usernames(req, search_param):
-    students = User.objects.filter(username__startswith=search_param).exclude(username=req.user.username)
-    serialize_students_select(students)
+def get_students_usernames(req, search_param=None):
+    students = User.objects.exclude(username=req.user.username)
+    if search_param is not None:
+        students = students.filter(username__startswith=search_param)
     r = {
         "success": "true",
         "results": serialize_students_select(students)
@@ -301,26 +313,27 @@ def get_students_usernames(req, search_param):
 
 
 @login_required
-def get_students_in_group(req, group_id, search_param):
+def get_students_in_group(req, group_id, search_param=None):
+    students_in = Group.objects.get(pk=group_id).members.all().exclude(user__username=req.user.username)
+    users_in = User.objects.filter(student__in=students_in)
+    if search_param is not None:
+        users_in = users_in.filter(username__startswith=search_param)
+    r = {
+        "success": "true",
+        "results": serialize_students_select(users_in)
+    }
+    return HttpResponse(json.dumps(r), content_type='application/json')
+
+
+@login_required
+def get_students_not_in_group(req, group_id, search_param=None):
     students_in = Group.objects.get(pk=group_id).members.all()
-    students = User.objects.filter(username__startswith=search_param).filter(student__in=students_in).exclude(
-        username=req.user.username)
-    serialize_students_select(students)
+    students_not_in = User.objects.exclude(student__in=students_in)
+    if search_param is not None:
+        students_not_in.filter(username__startswith=search_param)
     r = {
         "success": "true",
-        "results": serialize_students_select(students)
-    }
-    return HttpResponse(json.dumps(r), content_type='application/json')
-
-
-@login_required
-def get_students_not_in_group(req, group_id, search_param):
-    students_not_in = Group.objects.get(pk=group_id).members.all()
-    students = User.objects.filter(username__startswith=search_param).exclude(student__in=students_not_in)
-    serialize_students_select(students)
-    r = {
-        "success": "true",
-        "results": serialize_students_select(students)
+        "results": serialize_students_select(students_not_in)
     }
     return HttpResponse(json.dumps(r), content_type='application/json')
 

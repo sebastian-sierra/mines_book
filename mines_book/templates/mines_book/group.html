@@ -40,24 +40,27 @@
             </div>
         </div>
         <div class="ui clearing right aligned segment">
-            {% if request.user == group.admin.user %}
-                <a id="edit_group_a">
-                    <i class="edit icon"></i>
-                    Edit group
-                </a>
-            {% endif %}
-            {% if user.student not in group.followers.all %}
-                <a id="follow_group_a">
-                    <i class="follow icon"></i>
-                    Follow group
-                </a>
-            {% endif %}
-            {% if user.student in group.followers.all %}
-                <a id="unfollow_group_a">
-                    <i class="follow icon"></i>
-                    Unfollow group
-                </a>
-            {% endif %}
+            <div class="ui horizontal list">
+
+                {% if request.user == group.admin.user %}
+                    <a id="edit_group_a" class="item">
+                        <i class="edit icon"></i>
+                        Edit group
+                    </a>
+                {% endif %}
+                {% if user.student not in group.followers.all %}
+                    <a id="follow_group_a" class="item">
+                        <i class="plus icon"></i>
+                        Follow group
+                    </a>
+                {% endif %}
+                {% if user.student in group.followers.all %}
+                    <a id="unfollow_group_a" class="item">
+                        <i class="minus icon"></i>
+                        Unfollow group
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -74,7 +77,7 @@
     </div>
 
     <div class="ui bottom attached segment" id="group_content">
-        {% include 'mines_book/user_feed.html' with recipient_type="group" posts=group.posts_received.all %}
+        {% include 'mines_book/feed.html' with recipient_type="group" posts=group.posts_received.all %}
     </div>
 
     {% if request.user == group.admin.user %}

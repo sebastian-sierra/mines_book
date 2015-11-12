@@ -20,14 +20,14 @@ function onLoadGroupNav() {
     $('#edit_group_dropdown')
         .dropdown({
             apiSettings: {
-                url: '/search_students_not_in_group/' + group_id + '/{query}/'
+                url: '/search_students_not_in_group/' + group_id + '/{query}'
             }
         })
 
     $('#edit_group_dropdown_r')
         .dropdown({
             apiSettings: {
-                url: '/search_students_in_group/' + group_id + '/{query}/'
+                url: '/search_students_in_group/' + group_id + '/{query}'
             }
         })
 
