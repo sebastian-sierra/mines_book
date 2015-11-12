@@ -9,6 +9,13 @@ import json
 from django.contrib.auth.decorators import login_required
 
 
+def index(req):
+    if req.user.is_authenticated():
+        return redirect('student_view', student_username=req.user.username)
+    else:
+        return redirect('/login/')
+
+
 def login(req):
     if req.user.is_authenticated():
         return redirect('student_view', student_username=req.user.username)

@@ -121,11 +121,13 @@ function showCreateUserModal() {
             password: 'empty',
             confirm_password: 'match[password]',
             option: 'empty',
-            prom: 'empty',
+            prom: ['exactLength[4]', 'integer[1990..2020]'],
             profile_pic: 'empty',
             city: 'empty',
             country: 'empty',
-            description: 'empty'
+        },
+        prompt: {
+            integer: '{name} must be a year between 1990 and 2000',
         }
     })
 }
@@ -139,11 +141,13 @@ function showEditUserModal() {
             first_name: 'empty',
             last_name: 'empty',
             confirm_password: 'match[password]',
-            prom: 'empty',
+            prom: ['exactLength[4]', 'integer[1990..2020]'],
             option: 'empty',
             city: 'empty',
             country: 'empty',
-            description: 'empty'
+        },
+        prompt: {
+            integer: '{name} must be a year between 1990 and 2000',
         }
     })
 }
