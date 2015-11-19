@@ -39,6 +39,24 @@ function create_post(form) {
         success: function (html_response) {
             $('#new_post_form').after(html_response)
             $('#id_content').val('')
+        },
+        // handle unsuccessful response
+        error: function (response) {
+            console.log(response)
+            var message = "<div class=\"ui fluid negative message\">" +
+                "<i class=\"close icon\"></i>" +
+                "<div class=\"header\">" +
+                "Post cannot be empty." +
+                "</div>" +
+                "</div>"
+            $('.ui.cards').before(message)
+            $('.message .close')
+                .on('click', function() {
+                    $(this)
+                        .closest('.message')
+                        .transition('fade')
+                    ;
+                })
         }
     });
 };
@@ -57,6 +75,24 @@ function create_comment(comment_form_id) {
         success: function (html_response) {
             $('#new_comment_form_for_' + comment_form_id).before(html_response)
             $(content_id).val('')
+        },
+        // handle unsuccessful response
+        error: function (response) {
+            console.log(response)
+            var message = "<div class=\"ui fluid negative message\">" +
+                "<i class=\"close icon\"></i>" +
+                "<div class=\"header\">" +
+                "Comment cannot be empty." +
+                "</div>" +
+                "</div>"
+            $('.ui.cards').before(message)
+            $('.message .close')
+                .on('click', function() {
+                    $(this)
+                        .closest('.message')
+                        .transition('fade')
+                    ;
+                })
         }
     });
 };

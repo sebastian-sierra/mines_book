@@ -205,21 +205,23 @@ def create_group(req):
 @login_required
 def edit_group(req, group_id):
     group = Group.objects.get(pk=group_id)
-    if req.method == "POST":
-        form = GroupForm(req.POST, req.FILES, instance=group)
-        if form.is_valid():
-            group.name = form.cleaned_data['name']
-            group.description = form.cleaned_data['description']
-            group.profile_pic = form.cleaned_data['profile_pic']
-            group.members.add(req.user.student, *form.cleaned_data['members'])
-            group.members.remove(*form.cleaned_data['deleted_members'])
-            group.save()
-            return redirect('group_view', group_id=group.id)
+    if req.user == group.admin.user:
+        if req.method == "POST":
+            form = GroupForm(req.POST, req.FILES, instance=group)
+            if form.is_valid():
+                group.name = form.cleaned_data['name']
+                group.description = form.cleaned_data['description']
+                group.profile_pic = form.cleaned_data['profile_pic']
+                group.members.add(req.user.student, *form.cleaned_data['members'])
+                group.members.remove(*form.cleaned_data['deleted_members'])
+                group.save()
+                return redirect('group_view', group_id=group.id)
 
-    group = Group.objects.get(pk=group_id)
-    edit_group_form = GroupForm(instance=group)
-    context = {"form": edit_group_form, "group": group, "action": "edit"}
-    return render(req, 'mines_book/group_form.html', context)
+        group = Group.objects.get(pk=group_id)
+        edit_group_form = GroupForm(instance=group)
+        context = {"form": edit_group_form, "group": group, "action": "edit"}
+        return render(req, 'mines_book/group_form.html', context)
+    raise Exception("Please don't try to hack the application.")
 
 
 @login_required
@@ -273,7 +275,7 @@ def new_post_to_group(req, group_id):
 
             context = {'post': post_to_group}
             return render(req, 'mines_book/post_card.html', context)
-    return redirect('group_view', group_id=group_id)
+    raise Exception("The form is not valid.")
 
 
 @login_required
@@ -329,7 +331,7 @@ def new_post_to_student(req, student_username):
 
             context = {'post': post_to_student}
             return render(req, 'mines_book/post_card.html', context)
-    return redirect('student_view', student_username=user.username)
+    raise Exception("The form is not valid.")
 
 
 @login_required
@@ -348,66 +350,72 @@ def new_comment(req, post_id):
 
             context = {"comment": comment}
             return render(req, 'mines_book/comments.html', context)
-    return redirect('student_view', student_username=user.username)
+    raise Exception("The form is not valid.")
 
 
 @login_required
 def delete_post(req):
-    if req.method == 'DELETE':
+    post = Post.objects.get(pk=int(QueryDict(req.body).get('postpk')))
+    if req.user == post.author.user:
+        if req.method == 'DELETE':
+            post.delete()
 
-        post = Post.objects.get(pk=int(QueryDict(req.body).get('postpk')))
-        post.delete()
+            response_data = {'msg': 'Post was deleted.'}
 
-        response_data = {'msg': 'Post was deleted.'}
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
-    else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+        else:
+            return HttpResponse(
+                json.dumps({"nothing to see": "this isn't happening"}),
+                content_type="application/json"
+            )
+    raise Exception("Please don't try to hack the application.")
 
 
 @login_required
 def delete_comment(req):
-    if req.method == 'DELETE':
+    comment = Comment.objects.get(pk=int(QueryDict(req.body).get('commentpk')))
+    if req.user == comment.author.user:
+        if req.method == 'DELETE':
+            comment.delete()
 
-        comment = Comment.objects.get(pk=int(QueryDict(req.body).get('commentpk')))
-        comment.delete()
+            response_data = {'msg': 'Comment was deleted.'}
 
-        response_data = {'msg': 'Comment was deleted.'}
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
-    else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+        else:
+            return HttpResponse(
+                json.dumps({"nothing to see": "this isn't happening"}),
+                content_type="application/json"
+            )
+    raise Exception("Please don't try to hack the application.")
 
 
 @login_required
 def edit_post(req, post_id):
     post = Post.objects.get(pk=post_id)
-    if req.method == 'PUT':
-        new_content = QueryDict(req.body).get('content')
-        post.content = new_content
-        post.save()
-        msg = {'content': post.content}
-        return HttpResponse(json.dumps(msg), content_type='application/json')
+    if req.user == post.author.user:
+        if req.method == 'PUT':
+            new_content = QueryDict(req.body).get('content')
+            post.content = new_content
+            post.save()
+            msg = {'content': post.content}
+            return HttpResponse(json.dumps(msg), content_type='application/json')
+    raise Exception("Please don't try to hack the application.")
 
 
 @login_required
 def edit_comment(req, comment_id):
     comment = Comment.objects.get(pk=comment_id)
-    if req.method == 'PUT':
-        new_content = QueryDict(req.body).get('content')
-        comment.content = new_content
-        comment.save()
-        msg = {'content': comment.content}
-        return HttpResponse(json.dumps(msg), content_type='application/json')
+    if req.user == comment.author.user:
+        if req.method == 'PUT':
+            new_content = QueryDict(req.body).get('content')
+            comment.content = new_content
+            comment.save()
+            msg = {'content': comment.content}
+            return HttpResponse(json.dumps(msg), content_type='application/json')
+    raise Exception("Please don't try to hack the application.")
