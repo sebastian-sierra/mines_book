@@ -27,7 +27,7 @@
                 </a>
 
                 <div class="header">
-                    <a>{{ post.post.author.user.first_name }} {{ post.post.author.user.last_name }}</a>
+                    <a href="/students/{{ post.post.author.user.username }}">{{ post.post.author.user.first_name }} {{ post.post.author.user.last_name }}</a>
                 </div>
                 <div class="meta">
                     <span class="date">{{ post.post.date_created }}</span>
