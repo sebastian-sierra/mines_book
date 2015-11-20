@@ -81,7 +81,7 @@ def students_view(req):
             else:
                 return redirect('/login/')
 
-        if req.user.is_authenticated():
+        else:
             form = StudentForm(req.POST, req.FILES, instance=req.user.student)
             student = req.user.student
             if form.is_valid():
@@ -104,6 +104,7 @@ def students_view(req):
             else:
                 return redirect('student_view', student_username=student.user.username)
 
+    else:
         return redirect('index')
 
     if req.method == "DELETE":
