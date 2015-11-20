@@ -11,6 +11,7 @@ function onLoadUserNav() {
     $('#edit_user_a').click(showEditUserModal)
     $('#create_user_a').click(showCreateUserModal)
     $('#create_user_modal').modal()
+    $('#id_profile_pic').attr({accept:"image/*"})
     onLoadFriendsAjax()
 }
 
@@ -115,16 +116,16 @@ function showCreateUserModal() {
 
     $('#create_user_form').form({
         fields: {
-            username: 'empty',
-            first_name: 'empty',
-            last_name: 'empty',
+            username: ['empty', 'maxLength[30]'],
+            first_name: ['empty', 'maxLength[30]'],
+            last_name: ['empty', 'maxLength[30]'],
             password: 'empty',
             confirm_password: 'match[password]',
             option: 'empty',
             prom: ['exactLength[4]', 'integer[1990..2020]'],
             profile_pic: 'empty',
-            city: 'empty',
-            country: 'empty',
+            city: ['empty', 'maxLength[20]'],
+            country: ['empty', 'maxLength[20]'],
         },
         prompt: {
             integer: '{name} must be a year between 1990 and 2000',
@@ -137,14 +138,14 @@ function showEditUserModal() {
 
     $('#edit_user_form').form({
         fields: {
-            username: 'empty',
-            first_name: 'empty',
-            last_name: 'empty',
+            username: ['empty', 'maxLength[30]'],
+            first_name: ['empty', 'maxLength[30]'],
+            last_name: ['empty', 'maxLength[30]'],
             confirm_password: 'match[password]',
             prom: ['exactLength[4]', 'integer[1990..2020]'],
             option: 'empty',
-            city: 'empty',
-            country: 'empty',
+            city: ['empty', 'maxLength[20]'],
+            country: ['empty', 'maxLength[20]'],
         },
         prompt: {
             integer: '{name} must be a year between 1990 and 2000',
@@ -156,7 +157,7 @@ function editGroup() {
     var group_id = $(this).data('id')
     $.get('/groups/' + group_id + '/edit/', function (response) {
         $('#create_group_modal').after(response)
-
+        $('#id_profile_pic').attr({accept:"image/*"})
         $('#edit_group_modal').modal()
 
         $('#edit_group_form')

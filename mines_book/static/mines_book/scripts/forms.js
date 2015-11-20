@@ -15,6 +15,13 @@ function onLoadForms() {
         var comment_id = this.id
         create_comment(comment_id)
     })
+
+    $('body').on('click', '.message .close', function () {
+        $(this)
+            .closest('.message')
+            .transition('fade')
+        ;
+    })
 }
 
 // AJAX for posting
@@ -50,13 +57,6 @@ function create_post(form) {
                 "</div>" +
                 "</div>"
             $('.ui.cards').before(message)
-            $('.message .close')
-                .on('click', function() {
-                    $(this)
-                        .closest('.message')
-                        .transition('fade')
-                    ;
-                })
         }
     });
 };
@@ -86,13 +86,7 @@ function create_comment(comment_form_id) {
                 "</div>" +
                 "</div>"
             $('.ui.cards').before(message)
-            $('.message .close')
-                .on('click', function() {
-                    $(this)
-                        .closest('.message')
-                        .transition('fade')
-                    ;
-                })
+
         }
     });
 };

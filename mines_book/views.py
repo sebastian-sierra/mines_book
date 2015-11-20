@@ -77,11 +77,14 @@ def students_view(req):
                 student.save()
                 user = authenticate(username=username, password=password)
                 auth_login(req, user)
+                return redirect('student_view', student_username=student.user.username)
+            else:
+                return redirect('/login/')
 
         if req.user.is_authenticated():
             form = StudentForm(req.POST, req.FILES, instance=req.user.student)
+            student = req.user.student
             if form.is_valid():
-                student = req.user.student
                 student.user.first_name = form.cleaned_data['first_name']
                 student.user.last_name = form.cleaned_data['last_name']
                 student.option = form.cleaned_data['option']
@@ -97,8 +100,11 @@ def students_view(req):
                     auth_login(req, user)
                 student.save()
                 student.user.save()
+                return redirect('student_view', student_username=student.user.username)
+            else:
+                return redirect('student_view', student_username=student.user.username)
 
-        return redirect('student_view', student_username=student.user.username)
+        return redirect('index')
 
     if req.method == "DELETE":
         req.user.delete()
@@ -175,9 +181,12 @@ def group_view(req, group_id):
                       context={"group": group, "group_form": group_form, "post_form": post_form, "posts": posts})
 
     if req.method == "DELETE":
-        group.delete()
-        response_data = {'msg': 'Group was deleted.'}
-        return HttpResponse(json.dumps(response_data), content_type='application/json')
+        if req.user == group.admin.user:
+            group.delete()
+            response_data = {'msg': 'Group was deleted.'}
+            return HttpResponse(json.dumps(response_data), content_type='application/json')
+        else:
+            raise Exception("Please don't try to hack the application.")
 
 
 @login_required

@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^login[/]', views.login, name="login"),
     url(r'^logout[/]', views.logout),
 
-    url(r'^$', views.index),
+    url(r'^$', views.index, name="index"),
 
     # Search routes for json APIs
     url(r'^search/(?P<search_param>\w|.+)[/]$', views.search),

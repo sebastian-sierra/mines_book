@@ -7,6 +7,7 @@ function onLoadGroupNav() {
     $('#group_members_a').click(showMembers)
     $('#group_followers_a').click(showFollowers)
     $('#edit_group_a').click(showEditGroupModal)
+    $('#id_profile_pic').attr({accept:"image/*"})
     $('#edit_group_modal').modal()
     var group_id = $('#group_id').data('group_id')
     $('#edit_group_form')
