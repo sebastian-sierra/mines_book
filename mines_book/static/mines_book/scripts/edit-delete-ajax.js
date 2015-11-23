@@ -133,15 +133,16 @@ function complete_post_edit() {
 
 function edit_comment(comment_id) {
 
-    $('#comment-content-' + comment_id).parent().next().hide()
+    var $comment_content = $('#comment-content-' + comment_id)
+    $comment_content.next().hide()
     var replaceHTML =
         "<input name=\"content\" id=\"edit-comment-input\" value=\""
-        + $('#comment-content-' + comment_id).get(0).innerHTML
+        + $comment_content.get(0).innerHTML
         + "\">" +
         "<button class=\"ui button primary mini\" style=\"margin-left:3%\" id=\"edit-comment-submit\" " +
         "data-id=\"" + comment_id + "\" type=\"submit\">Submit</button>"
-    $('#comment-content-' + comment_id).replaceWith(replaceHTML)
-    console.log("opened comment edit successfully");
+    $comment_content.replaceWith(replaceHTML)
+    console.log("opened comment edit successfully")
 };
 
 function complete_comment_edit() {
@@ -157,7 +158,7 @@ function complete_comment_edit() {
             $('#edit-comment-input').replaceWith(replaceHTML)
             $('#edit-comment-submit').replaceWith()
             $('#comment-content-' + comment_id).parent().next().show()
-            console.log("comment edit successful");
+            console.log("comment edit successful")
         }
     });
 };
