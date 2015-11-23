@@ -4,6 +4,7 @@
 function onLoadFollowersAjax() {
     $('#follow_group_a').click(followGroup)
     $('#unfollow_group_a').click(unfollowGroup)
+    $('#leave_group_a').click(leaveGroup)
 }
 
 function followGroup() {
@@ -21,6 +22,17 @@ function unfollowGroup() {
     var group_id = $('#group_id').data('group_id')
     $.ajax({
         url: "/groups/" + group_id + "/follow", // the endpoint
+        type: "DELETE", // http method
+        success: function (response) {
+            window.location.replace("/groups/" + group_id)
+        }
+    })
+}
+
+function leaveGroup() {
+    var group_id = $('#group_id').data('group_id')
+    $.ajax({
+        url: "/groups/" + group_id + "/leave", // the endpoint
         type: "DELETE", // http method
         success: function (response) {
             window.location.replace("/groups/" + group_id)

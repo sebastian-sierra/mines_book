@@ -263,10 +263,24 @@ def follow_view(req, group_id):
     if req.method == "PUT":
         group.followers.add(req.user.student)
         msg = {"status": "success"}
+        return HttpResponse(json.dumps(msg), content_type='application/json')
     elif req.method == "DELETE":
         group.followers.remove(req.user.student)
         msg = {"status": "success"}
-    return HttpResponse(json.dumps(msg), content_type='application/json')
+        return HttpResponse(json.dumps(msg), content_type='application/json')
+    else:
+        raise Exception("You are not supposed to be here")
+
+
+@login_required()
+def leave_group(req, group_id):
+    if req.method == "DELETE":
+        group = Group.objects.get(pk=group_id)
+        group.members.remove(req.user.student)
+        msg = {"status": "success"}
+        return HttpResponse(json.dumps(msg), content_type='application/json')
+    else:
+        raise Exception("Your are not supposed to be here")
 
 
 @login_required

@@ -60,6 +60,12 @@
                         Unfollow group
                     </a>
                 {% endif %}
+                {% if user.student in group.members.all and user.student != group.admin %}
+                        <a id="leave_group_a" class="item">
+                            <i class="sign out icon"></i>
+                            Leave group
+                        </a>
+                    {% endif %}
             </div>
         </div>
     </div>
