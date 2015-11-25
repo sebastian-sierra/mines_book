@@ -2,34 +2,42 @@ $(onLoadEditDelete)
 
 function onLoadEditDelete() {
 
+    // listener for all post delete icons
     $('body').on('click', '.delete.icon.post', function () {
         var post_id = this.id
         console.log(post_id) // sanity check
         delete_post(post_id)
     })
 
+    // listener for all comment delete icons
     $('body').on('click', '.delete.icon.comment', function () {
         var comment_id = this.id
         console.log(comment_id) // sanity check
         delete_comment(comment_id)
     })
 
+    // listener account delete button
     $('#delete_account_b').on('click', deleteAccount)
+    // listeners for group deletion
     $('body').on('click', '.right.floated.delete.group', deleteGroup)
     $('body').on('click', '#delete_group_b', deleteGroup)
 
+    // listener for all post edit icons
     $('body').on('click', '.edit.icon.post', function () {
         var post_id = this.id
         console.log(post_id) // sanity check
         edit_post(post_id)
     })
+    // listener for submit button of edited post
     $('body').on('click', '#edit-post-submit', complete_post_edit)
 
+    // listener for all comment edit icons
     $('body').on('click', '.edit.icon.comment', function () {
         var comment_id = this.id
         console.log(comment_id) // sanity check
         edit_comment(comment_id)
     })
+    // listener for  submit button of edited comment
     $('body').on('click', '#edit-comment-submit', complete_comment_edit)
 }
 

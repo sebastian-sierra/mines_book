@@ -1,14 +1,14 @@
 $(onLoadForms)
 
 function onLoadForms() {
-    // Submit post on submit
+    // listener for submit button of new post
     $('body').on('submit', '#post-form', function (event) {
         event.preventDefault();
         console.log("form submitted!")  // sanity check
         create_post(this)
     })
 
-    // Submit comment on submit
+    // listener for reply button of new comment
     $('body').on('submit', '.ui.reply.form.comment.form', function (event) {
         event.preventDefault();
         console.log("form submitted!") // sanity check
@@ -16,6 +16,7 @@ function onLoadForms() {
         create_comment(comment_id)
     })
 
+    // listener for close icon of error message
     $('body').on('click', '.message .close', function () {
         $(this)
             .closest('.message')

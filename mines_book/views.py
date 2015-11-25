@@ -10,6 +10,12 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(req):
+    """
+    :param req: the received HTTP request
+    :return: an HTTP redirect:
+            - to the user's profile if the user is logged in
+            - to the login page if no user is logged in
+    """
     if req.user.is_authenticated():
         return redirect('student_view', student_username=req.user.username)
     else:
@@ -17,6 +23,12 @@ def index(req):
 
 
 def login(req):
+    """
+    :param req: the received HTTP request
+    :return: an HTTP response:
+             - redirect to the authenticated user's page if everything is fine
+             - render of the login page if not
+    """
     if req.user.is_authenticated():
         return redirect('student_view', student_username=req.user.username)
 
@@ -35,6 +47,10 @@ def login(req):
 
 @login_required
 def logout(req):
+    """
+    :param req: the received HTTP request
+    :return: render of the login page
+    """
     auth_logout(req)
     student_form = StudentForm()
     return render(req, 'mines_book/login.html', context={"form": student_form})
@@ -42,6 +58,11 @@ def logout(req):
 
 @login_required
 def student_view(req, student_username):
+    """
+    :param req: the received HTTP request
+    :param student_username: user name of the student
+    :return: render of the user's profile
+    """
     try:
         user = User.objects.filter(username=student_username)[0]
     except:
@@ -55,6 +76,15 @@ def student_view(req, student_username):
 
 
 def students_view(req):
+    """
+    :param req: the received HTTP request
+    :return: an HTTP response:
+             - redirect to the student view with altered user data if user is authenticated and the form data is valid
+             - redirect to the login page if user is authenticated and the form data is not valid
+             - redirect to the student view with altered user data if user isn't authenticated and the form data is valid
+             - redirect to the student view with old user data if user isn't authenticated and the form data is not valid
+             - redirect to the login page if the request method is not POST
+    """
     if req.method == "POST":
         if not req.user.is_authenticated():
             form = StudentForm(req.POST, req.FILES)
@@ -120,6 +150,11 @@ def students_view(req):
 
 @login_required
 def friend_view(req, student_username):
+    """
+    :param req: the received HTTP request
+    :param student_username: user name of the student which is to be added as friend
+    :return: redirect to the new friend's profile
+    """
     if req.method == "PUT":
         friend = User.objects.get(username=student_username).student
         req.user.student.friends.add(friend)
@@ -131,12 +166,21 @@ def friend_view(req, student_username):
 
 @login_required
 def get_all_groups(req):
+    """
+    :param req: the received HTTP request
+    :return: render of the page displaying all groups
+    """
     groups = Group.objects.all()
     return render(req, "mines_book/all_groups.html", {"groups": groups})
 
 
 @login_required
 def user_feed(req, student_username):
+    """
+    :param req: the received HTTP request
+    :param student_username: user name of the student whose feed is requested
+    :return: render of the user's feed
+    """
     user = User.objects.filter(username=student_username)[0]
     new_post_form = PostForm()
     context = {"user": user, "posts": user.student.posts_received.all().order_by('-post__date_created'),
@@ -146,6 +190,11 @@ def user_feed(req, student_username):
 
 @login_required
 def user_friends(req, student_username):
+    """
+    :param req: the received HTTP request
+    :param student_username: user name of the student whose friend list is requested
+    :return: render of student cards of all friends
+    """
     user = User.objects.filter(username=student_username)[0]
     context = {"students": user.student.friends.all()}
     return render(req, 'mines_book/student_cards.html', context)
@@ -153,6 +202,11 @@ def user_friends(req, student_username):
 
 @login_required
 def user_joined_groups(req, student_username):
+    """
+    :param req: the received HTTP request
+    :param student_username: user name of the student whose joined groups are requested
+    :return: render of group cards of all joined groups
+    """
     user = User.objects.filter(username=student_username)[0]
     new_group_form = GroupForm()
     context = {"groups": user.student.groups_joined.all(), "form": new_group_form, "student": user, "action": "create"}
@@ -161,6 +215,11 @@ def user_joined_groups(req, student_username):
 
 @login_required
 def user_followed_groups(req, student_username):
+    """
+    :param req: the received HTTP request
+    :param student_username: user name of the student whose followed groups are requested
+    :return: render of group cards of all followed groups
+    """
     user = User.objects.filter(username=student_username)[0]
     new_group_form = GroupForm()
     context = {"groups": user.student.groups_followed.all(), "form": new_group_form, "student": user,
@@ -170,6 +229,13 @@ def user_followed_groups(req, student_username):
 
 @login_required
 def group_view(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group whose page is requested
+    :return: an HTTP response:
+            - render to the group page if request method is PUT
+            - json response if request method is DELETE
+    """
     try:
         group = Group.objects.get(pk=group_id)
     except:
@@ -192,6 +258,12 @@ def group_view(req, group_id):
 
 @login_required
 def create_group(req):
+    """
+    :param req: the received HTTP request
+    :return: an HTTP response:
+             - redirect to group view if request method is POST
+             - redirect to the user's page who sent the request otherwise
+    """
     user = req.user
     if req.method == 'POST':
         form = GroupForm(req.POST, req.FILES)
@@ -214,6 +286,13 @@ def create_group(req):
 
 @login_required
 def edit_group(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group to be edited
+    :return: an HTTP response:
+             - redirect to group view with altered group data if request method is PUT and form data is valid
+             - redirect to the group form otherwise
+    """
     group = Group.objects.get(pk=group_id)
     if req.user == group.admin.user:
         if req.method == "POST":
@@ -236,6 +315,11 @@ def edit_group(req, group_id):
 
 @login_required
 def group_feed(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group whose feed is requested
+    :return: render of the group's feed
+    """
     posts = Group.objects.get(pk=group_id).posts_received.order_by("-post__date_created")
     new_post_form = PostForm()
     context = {"posts": posts,
@@ -245,6 +329,11 @@ def group_feed(req, group_id):
 
 @login_required
 def group_members(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group whose member list is requested
+    :return: render of student cards with all group members
+    """
     members = Group.objects.get(pk=group_id).members.all()
     context = {"students": members}
     return render(req, 'mines_book/student_cards.html', context)
@@ -252,6 +341,11 @@ def group_members(req, group_id):
 
 @login_required
 def group_followers(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group whose followers are requested
+    :return: render of student cards with all group followers
+    """
     followers = Group.objects.get(pk=group_id).followers.all()
     context = {"students": followers}
     return render(req, 'mines_book/student_cards.html', context)
@@ -259,6 +353,11 @@ def group_followers(req, group_id):
 
 @login_required
 def follow_view(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group whose followers are to be altered
+    :return: json response with success status
+    """
     group = Group.objects.get(pk=group_id)
     if req.method == "PUT":
         group.followers.add(req.user.student)
@@ -274,17 +373,27 @@ def follow_view(req, group_id):
 
 @login_required()
 def leave_group(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group to be left
+    :return: json response with success status if request method is DELETE
+    """
     if req.method == "DELETE":
         group = Group.objects.get(pk=group_id)
         group.members.remove(req.user.student)
         msg = {"status": "success"}
         return HttpResponse(json.dumps(msg), content_type='application/json')
     else:
-        raise Exception("Your are not supposed to be here")
+        raise Exception("You are not supposed to be here")
 
 
 @login_required
 def new_post_to_group(req, group_id):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group that gets a new post
+    :return: render of post card with the new post
+    """
     user = req.user
     if req.method == 'POST':
         form = PostForm(req.POST)
@@ -304,6 +413,11 @@ def new_post_to_group(req, group_id):
 
 @login_required
 def search(req, search_param):
+    """
+    :param req: the received HTTP request
+    :param search_param: parameter typed into the search field
+    :return: json response with matching students and groups
+    """
     students = User.objects.filter(username__contains=search_param)
     groups = Group.objects.filter(name__contains=search_param)
     search_dict = make_search_dict(students, groups)
@@ -312,6 +426,11 @@ def search(req, search_param):
 
 @login_required
 def get_students_usernames(req, search_param=None):
+    """
+    :param req: the received HTTP request
+    :param search_param: parameter that is searched for
+    :return: json response with matching students
+    """
     students = User.objects.exclude(username=req.user.username)
     if search_param is not None:
         students = students.filter(username__startswith=search_param)
@@ -321,6 +440,12 @@ def get_students_usernames(req, search_param=None):
 
 @login_required
 def get_students_in_group(req, group_id, search_param=None):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group that is searched in
+    :param search_param: parameter that is searched for
+    :return: json response with matching students
+    """
     students_in = Group.objects.get(pk=group_id).members.all().exclude(user__username=req.user.username)
     users_in = User.objects.filter(student__in=students_in)
     if search_param is not None:
@@ -331,6 +456,12 @@ def get_students_in_group(req, group_id, search_param=None):
 
 @login_required
 def get_students_not_in_group(req, group_id, search_param=None):
+    """
+    :param req: the received HTTP request
+    :param group_id: id of the group that is searched in
+    :param search_param: parameter that is searched for
+    :return: json response with non-matching students
+    """
     students_in = Group.objects.get(pk=group_id).members.all()
     students_not_in = User.objects.exclude(student__in=students_in)
     if search_param is not None:
@@ -341,6 +472,11 @@ def get_students_not_in_group(req, group_id, search_param=None):
 
 @login_required
 def new_post_to_student(req, student_username):
+    """
+    :param req: the received HTTP request
+    :param student_username: user name of student that gets a new post
+    :return:render of post card with the new post
+    """
     user = req.user
     if req.method == 'POST':
         form = PostForm(req.POST)
@@ -360,6 +496,11 @@ def new_post_to_student(req, student_username):
 
 @login_required
 def new_comment(req, post_id):
+    """
+    :param req: the received HTTP request
+    :param post_id: id of post that gets a new comment
+    :return: render of the comment list including the new comment if form data is valid
+    """
     user = req.user
     if req.method == 'POST':
         post = Post.objects.get(pk=post_id)
@@ -379,6 +520,12 @@ def new_comment(req, post_id):
 
 @login_required
 def delete_post(req):
+    """
+    :param req: the received HTTP request
+    :return: json response with
+             - success message if request method is DELETE
+             - error message otherwise
+    """
     post = Post.objects.get(pk=int(QueryDict(req.body).get('postpk')))
     if req.user == post.author.user:
         if req.method == 'DELETE':
@@ -400,6 +547,12 @@ def delete_post(req):
 
 @login_required
 def delete_comment(req):
+    """
+    :param req: the received HTTP request
+    :return: json response with
+             - success message if request method is DELETE
+             - error message otherwise
+    """
     comment = Comment.objects.get(pk=int(QueryDict(req.body).get('commentpk')))
     if req.user == comment.author.user:
         if req.method == 'DELETE':
@@ -421,6 +574,11 @@ def delete_comment(req):
 
 @login_required
 def edit_post(req, post_id):
+    """
+    :param req: the received HTTP request
+    :param post_id: id of post to be edited
+    :return: json response with new post content
+    """
     post = Post.objects.get(pk=post_id)
     if req.user == post.author.user:
         if req.method == 'PUT':
@@ -434,6 +592,11 @@ def edit_post(req, post_id):
 
 @login_required
 def edit_comment(req, comment_id):
+    """
+    :param req: the received HTTP request
+    :param comment_id: id of comment to be edited
+    :return: json response with new comment content
+    """
     comment = Comment.objects.get(pk=comment_id)
     if req.user == comment.author.user:
         if req.method == 'PUT':
