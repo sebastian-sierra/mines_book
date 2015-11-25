@@ -2,8 +2,11 @@
  * Created by sebastian on 11/9/15.
  */
 function onLoadFollowersAjax() {
+    // listener for 'follow group' icon
     $('#follow_group_a').click(followGroup)
+    // listener for 'unfollow group' icon
     $('#unfollow_group_a').click(unfollowGroup)
+    // listener for 'leave group' icon
     $('#leave_group_a').click(leaveGroup)
 }
 

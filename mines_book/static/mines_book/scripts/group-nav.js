@@ -3,9 +3,13 @@ $(onLoadGroupNav)
 
 
 function onLoadGroupNav() {
+    // listener for group feed tab
     $('#group_feed_a').click(showGroupFeed)
+    // listener for group members tab
     $('#group_members_a').click(showMembers)
+    // listener for group followers tab
     $('#group_followers_a').click(showFollowers)
+    // listener for 'edit group' icon
     $('#edit_group_a').click(showEditGroupModal)
     $('#id_profile_pic').attr({accept:"image/*"})
     $('#edit_group_modal').modal()

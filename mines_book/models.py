@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Student(models.Model):
+    """ - students are the users of the application
+        - the fields correspond to useful information about EMN students
+    """
     user = models.OneToOneField(User)
     profile_pic = models.ImageField(upload_to="students_profile_pics", null=True)
     prom = models.CharField(max_length=4)
@@ -28,6 +31,8 @@ class Student(models.Model):
 
 
 class Group(models.Model):
+    """ groups of students as there are for example the BDE, BDA etc. at EMN
+    """
     name = models.CharField(max_length=20)
     description = models.CharField(max_length=500)
     admin = models.ForeignKey('Student', related_name="managed_groups")
@@ -37,6 +42,8 @@ class Group(models.Model):
 
 
 class Post(models.Model):
+    """ a post
+    """
     content = models.CharField(max_length=500)
     author = models.ForeignKey('Student', related_name="posts_authored")
     date_created = models.DateTimeField(auto_now_add=True)
@@ -44,16 +51,22 @@ class Post(models.Model):
 
 
 class PostToStudent(models.Model):
+    """ a post to a student's wall
+    """
     post = models.OneToOneField('Post')
     recipient = models.ForeignKey('Student', related_name="posts_received")
 
 
 class PostToGroup(models.Model):
+    """ a post to a group's wall
+    """
     post = models.OneToOneField('Post')
     recipient = models.ForeignKey('Group', related_name="posts_received")
 
 
 class Comment(models.Model):
+    """ a comment to a post
+    """
     content = models.CharField(max_length=200)
     author = models.ForeignKey('Student', related_name="comments_authored")
     date_created = models.DateTimeField(auto_now_add=True)
