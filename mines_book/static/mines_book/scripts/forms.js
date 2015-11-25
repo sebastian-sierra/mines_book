@@ -65,7 +65,6 @@ function create_post(form) {
 // AJAX for commenting
 function create_comment(comment_form_id) {
     console.log("create comment is working!") // sanity check
-    //var post_id = $('#postid').data('postid')
     var content_id = "#id_comment_content_for_" + comment_form_id
     $.ajax({
         url: "/new_comment/" + comment_form_id + "/", // the endpoint

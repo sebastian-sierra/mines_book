@@ -3,6 +3,8 @@ from mines_book.models import Group, Student, Post, Comment
 
 
 class StudentForm(ModelForm):
+    """ form for creating new student users
+    """
     username = CharField(max_length=30)
     first_name = CharField(max_length=30)
     last_name = CharField(max_length=30)
@@ -15,6 +17,8 @@ class StudentForm(ModelForm):
 
 
 class GroupForm(ModelForm):
+    """ form for creating and editing groups
+    """
     members = ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
     deleted_members = ModelMultipleChoiceField(queryset=Student.objects.all(), required=False)
 
@@ -27,14 +31,16 @@ class GroupForm(ModelForm):
 
 
 class PostForm(ModelForm):
-
+    """ form for creating posts
+    """
     class Meta:
         model = Post
         fields = ["content"]
 
 
 class CommentForm(ModelForm):
-
+    """ form for creating comments
+    """
     class Meta:
         model = Comment
         fields = ["content"]
