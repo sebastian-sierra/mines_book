@@ -139,9 +139,6 @@ def students_view(req):
             else:
                 return redirect('student_view', student_username=student.user.username)
 
-    else:
-        return redirect('index')
-
     if req.method == "DELETE":
         req.user.delete()
         return redirect('login')
