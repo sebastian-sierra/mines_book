@@ -85,6 +85,11 @@ def students_view(req):
              - redirect to the student view with old user data if user isn't authenticated and the form data is not valid
              - redirect to the login page if the request method is not POST
     """
+
+    if req.method == "GET":
+        students = Student.objects.all()
+        return render(req, "mines_book/all_students.html", {"students": students})
+
     if req.method == "POST":
         if not req.user.is_authenticated():
             form = StudentForm(req.POST, req.FILES)
@@ -143,9 +148,6 @@ def students_view(req):
 
     if not req.user.is_authenticated():
         return redirect('login')
-
-    students = Student.objects.all()
-    return render(req, "mines_book/all_students.html", {"students": students})
 
 
 @login_required

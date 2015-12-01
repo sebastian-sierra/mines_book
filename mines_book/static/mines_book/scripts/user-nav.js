@@ -163,8 +163,8 @@ function editGroup() {
         $('#edit_group_form')
             .form({
                 fields: {
-                    name: 'empty',
-                    description: 'empty'
+                    name: ['empty', 'maxLength[20]'],
+                    description: ['empty', 'maxLength[500]'],
                 }
             })
 
